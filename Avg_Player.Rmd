@@ -1,16 +1,7 @@
----
-title: "Average Player"
-author: "David Roycroft"
-date: "2/12/2021"
-output: pdf_document
----
 
 ```{r setup, include=FALSE}
 library(readr)
 library(tidyverse)
-
-#Setting Working Directory
-setwd("C:\\Users\\Sherlock\\Documents\\R Projects\\NBA")
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- rename(BRTotal, Player = ï..Player)
