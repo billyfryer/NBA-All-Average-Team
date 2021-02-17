@@ -1,0 +1,193 @@
+---
+title: "Average Player"
+author: "David Roycroft"
+date: "2/12/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(readr)
+library(tidyverse)
+
+#Setting Working Directory
+setwd("C:\\Users\\Sherlock\\Documents\\R Projects\\NBA")
+
+BRTotal <- read.csv("2019_20_BRTotal.csv")
+BRTotal <- rename(BRTotal, Player = ï..Player)
+AverageData  <- select(BRTotal, Player, Pos, Tm, G, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
+
+#Finding the Stats for PGs
+PG_Data <- filter(AverageData, Pos == "PG")
+
+#Finding the Differences for each player from the averages
+PG_Sum_G <- select(PG_Data,FG:PTS) 
+PG_Totals <- colSums(PG_Sum_G)
+
+#Building the Dataframe of the Differences for Games Played
+PG_Avg_G <- PG_Totals / sum(PG_Data$G)
+PG_Sum_G <- PG_Sum_G %>% mutate(abs(PG_Sum_G$FG - PG_Avg_G[1]), abs(PG_Sum_G$FGA - PG_Avg_G[2]), abs(PG_Sum_G$X3P - PG_Avg_G[3]), abs(PG_Sum_G$X3PA- PG_Avg_G[4]), abs(PG_Sum_G$X2P - PG_Avg_G[5]), abs(PG_Sum_G$X2PA - PG_Avg_G[6]), abs(PG_Sum_G$FT - PG_Avg_G[7]), abs(PG_Sum_G$FTA - PG_Avg_G[8]), abs(PG_Sum_G$TRB - PG_Avg_G[9]), abs(PG_Sum_G$AST - PG_Avg_G[10]), abs(PG_Sum_G$STL - PG_Avg_G[11]), abs(PG_Sum_G$BLK - PG_Avg_G[12]), abs(PG_Sum_G$TOV - PG_Avg_G[13]), abs(PG_Sum_G$PTS - PG_Avg_G[14]))
+PG_Diff_G <- select(PG_Sum_G, 15:28)
+PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$Pos)
+colnames(PG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "Pos")
+PG_Diff_G <- select(PG_Diff_G, Player, `Total Difference`, G, Pos)
+
+#Finding the Stats for SGs
+SG_Data <- filter(AverageData, Pos == "SG")
+
+#Finding the Differences for each player from the averages
+SG_Sum_G <- select(SG_Data, FG:PTS)
+SG_Totals <- colSums(SG_Sum_G)
+
+#Building the Dataframe of the Differences
+SG_Avg_G <- SG_Totals / sum(SG_Data$G)
+SG_Sum_G <- SG_Sum_G %>% mutate(abs(SG_Sum_G$FG - SG_Avg_G[1]), abs(FGA - SG_Avg_G[2]), abs(SG_Sum_G$X3P - SG_Avg_G[3]), abs(SG_Sum_G$X3PA- SG_Avg_G[4]), abs(SG_Sum_G$X2P - SG_Avg_G[5]), abs(SG_Sum_G$X2PA - SG_Avg_G[6]), abs(SG_Sum_G$FT - SG_Avg_G[7]), abs(SG_Sum_G$FTA - SG_Avg_G[8]), abs(SG_Sum_G$TRB - SG_Avg_G[9]), abs(SG_Sum_G$AST - SG_Avg_G[10]), abs(SG_Sum_G$STL - SG_Avg_G[11]), abs(SG_Sum_G$BLK - SG_Avg_G[12]), abs(SG_Sum_G$TOV - SG_Avg_G[13]), abs(SG_Sum_G$PTS - SG_Avg_G[14]))
+SG_Diff_G <- select(SG_Sum_G, 15:28)
+SG_Diff_G <- SG_Diff_G %>% mutate(rowSums(SG_Diff_G), SG_Data$Player, SG_Data$G, SG_Data$Pos)
+colnames(SG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "Pos")
+SG_Diff_G <- select(SG_Diff_G, Player, `Total Difference`, G, Pos)
+
+#Finding the Stats for SFs
+SF_Data <- filter(AverageData, Pos == "SF")
+
+#Finding the Differences for each player from the averages
+SF_Sum_G <- select(SF_Data, FG:PTS)
+SF_Totals <- colSums(SF_Sum_G)
+
+#Building the Dataframe of the Differences
+SF_Avg_G <- SF_Totals / sum(SF_Data$G)
+SF_Sum_G <- SF_Sum_G %>% mutate(abs(SF_Sum_G$FG - SF_Avg_G[1]), abs(SF_Sum_G$FGA - SF_Avg_G[2]), abs(SF_Sum_G$X3P - SF_Avg_G[3]), abs(SF_Sum_G$X3PA- SF_Avg_G[4]), abs(SF_Sum_G$X2P - SF_Avg_G[5]), abs(SF_Sum_G$X2PA - SF_Avg_G[6]), abs(SF_Sum_G$FT - SF_Avg_G[7]), abs(SF_Sum_G$FTA - SF_Avg_G[8]), abs(SF_Sum_G$TRB - SF_Avg_G[9]), abs(SF_Sum_G$AST - SF_Avg_G[10]), abs(SF_Sum_G$STL - SF_Avg_G[11]), abs(SF_Sum_G$BLK - SF_Avg_G[12]), abs(SF_Sum_G$TOV - SF_Avg_G[13]), abs(SF_Sum_G$PTS - SF_Avg_G[14]))
+SF_Diff_G <- select(SF_Sum_G, 15:28)
+SF_Diff_G <- SF_Diff_G %>% mutate(rowSums(SF_Diff_G), SF_Data$Player, SF_Data$G, SF_Data$Pos)
+colnames(SF_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "Pos")
+SF_Diff_G <- select(SF_Diff_G, Player, `Total Difference`, G, Pos)
+
+#Finding the Stats for PFs
+PF_Data <- filter(AverageData, Pos == "PF")
+
+#Finding the Differences for each player from the averages
+PF_Sum_G <- select(PF_Data, FG:PTS)
+PF_Totals <- colSums(PF_Sum_G)
+
+#Building the Dataframe of the Differences
+PF_Avg_G <- PF_Totals / sum(PF_Data$G)
+PF_Sum_G <- PF_Sum_G %>% mutate(abs(PF_Sum_G$FG - PF_Avg_G[1]), abs(PF_Sum_G$FGA - PF_Avg_G[2]), abs(PF_Sum_G$X3P - PF_Avg_G[3]), abs(PF_Sum_G$X3PA- PF_Avg_G[4]), abs(PF_Sum_G$X2P - PF_Avg_G[5]), abs(PF_Sum_G$X2PA - PF_Avg_G[6]), abs(PF_Sum_G$FT - PF_Avg_G[7]), abs(PF_Sum_G$FTA - PF_Avg_G[8]), abs(PF_Sum_G$TRB - PF_Avg_G[9]), abs(PF_Sum_G$AST - PF_Avg_G[10]), abs(PF_Sum_G$STL - PF_Avg_G[11]), abs(PF_Sum_G$BLK - PF_Avg_G[12]), abs(PF_Sum_G$TOV - PF_Avg_G[13]), abs(PF_Sum_G$PTS - PF_Avg_G[14]))
+PF_Diff_G <- select(PF_Sum_G, 15:28)
+PF_Diff_G <- PF_Diff_G %>% mutate(rowSums(PF_Diff_G), PF_Data$Player, PF_Data$G, PF_Data$Pos)
+colnames(PF_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "Pos")
+PF_Diff_G <- select(PF_Diff_G, Player, `Total Difference`, G, Pos)
+
+#Finding the Stats for Cs
+C_Data  <- filter(AverageData, Pos == "C")
+
+#Finding the Differences for each player from the averages
+C_Sum_G <- select(C_Data, FG:PTS)
+C_Totals <- colSums(C_Sum_G)
+
+#Building the Dataframe of the Differences
+C_Avg_G <- C_Totals / sum(C_Data$G)
+C_Sum_G <- C_Sum_G %>% mutate(abs(C_Sum_G$FG - C_Avg_G[1]), abs(C_Sum_G$FGA - C_Avg_G[2]), abs(C_Sum_G$X3P - C_Avg_G[3]), abs(C_Sum_G$X3PA- C_Avg_G[4]), abs(C_Sum_G$X2P - C_Avg_G[5]), abs(C_Sum_G$X2PA - C_Avg_G[6]), abs(C_Sum_G$FT - C_Avg_G[7]), abs(C_Sum_G$FTA - C_Avg_G[8]), abs(C_Sum_G$TRB - C_Avg_G[9]), abs(C_Sum_G$AST - C_Avg_G[10]), abs(C_Sum_G$STL - C_Avg_G[11]), abs(C_Sum_G$BLK - C_Avg_G[12]), abs(C_Sum_G$TOV - C_Avg_G[13]), abs(C_Sum_G$PTS - C_Avg_G[14]))
+C_Diff_G <- select(C_Sum_G, 15:28)
+C_Diff_G <- C_Diff_G %>% mutate(rowSums(C_Diff_G), C_Data$Player, C_Data$G, C_Data$Pos)
+colnames(C_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "Pos")
+C_Diff_G <- select(C_Diff_G, Player, `Total Difference`, G, Pos)
+
+#Total Diff
+G_Diff <- rbind(PG_Diff_G, SG_Diff_G)
+G_Diff <- rbind(G_Diff, SF_Diff_G)
+G_Diff <- rbind(G_Diff, PF_Diff_G)
+G_Diff <- rbind(G_Diff, C_Diff_G)
+```
+
+## PG Data
+
+While this data is skewed right, since the sample size is 97, we will still perform statisitical analysis on this data. 
+```{r, echo=FALSE}
+ggplot(PG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "aquamarine3", col = "black") 
+```
+
+```{r, echo=FALSE}
+#PG_Diff_G %>% select(Player, `Total Difference`) %>% arrange(desc(`Total Difference`))
+```
+
+
+
+## SG Data
+```{r, echo=FALSE}
+ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "orchid2", col = "black") 
+```
+
+
+
+## SF Data
+```{r, echo=FALSE}
+ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "dodgerblue2", col = "black") 
+```
+
+
+## PF Data
+```{r, echo=FALSE}
+ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "darkgoldenrod3", col = "black") 
+```
+
+
+## C Data
+```{r, echo=FALSE}
+ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "coral1", col = "black") 
+```
+
+
+
+The average difference
+```{r, echo=F}
+summary(PG_Diff_G$`Total Difference`)
+
+ggplot(PG_Diff_G, aes(x = G, y = `Total Difference`, label = Player)) + geom_text(aes(label = Player), size = 2)
+
+hist(PG_Diff_G$`Total Difference`)
+```
+
+Only Outliers
+```{r, echo=FALSE}
+M = mean(PG_Diff_G$`Total Difference`)
+S = sd(PG_Diff_G$`Total Difference`)
+PG_Diff_G %>% filter(`Total Difference` > M + 2*S) 
+```
+
+## Total Data
+Average of the difference for all positions
+```{r, echo=F, warning=FALSE}
+mu = mean(G_Diff$`Total Difference`)
+hist(G_Diff$`Total Difference`)
+
+ggplot(G_Diff, aes(x = `Total Difference`, color = Pos)) + geom_histogram(binwidth = 500, fill="white", alpha=0.5, position="identity")
+
+
+ggplot(G_Diff, aes(G, `Total Difference`, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 2, check_overlap = TRUE) + geom_smooth(method="glm", se=FALSE, color = "black")
+```
+
+
+Who are the most average players across all statistics?
+```{r, echo=FALSE}
+head(arrange(G_Diff, `Total Difference`))
+```
+
+Excluding players who have played less than 20 games
+```{r, echo=FALSE}
+head(arrange(filter(G_Diff, G_Diff$G >= 20), `Total Difference`)) 
+```
+
+Assuming starters will play 75% of games (excluding injury) here are the most average starters
+```{r, echo=FALSE}
+head(arrange(filter(G_Diff, G_Diff$G >= 70), `Total Difference`)) 
+```
+
+
+
+
+
+
+
+
+
+
+
