@@ -1,11 +1,11 @@
 
-```{r setup, include=FALSE}
+```{r setup, echo=T, warning=FALSE, message=TRUE}
 library(readr)
 library(tidyverse)
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- rename(BRTotal, Player = ï..Player)
-AverageData  <- select(BRTotal, Player, Pos, Tm, G, MP, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
+AverageData  <- select(BRTotal, Player, Pos, Tm, G, MP, GS, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
 
 #Finding the Stats for PGs
 PG_Data <- filter(AverageData, Pos == "PG")
@@ -157,20 +157,20 @@ MP_Diff <- rbind(MP_Diff, C_Diff_MP)
 ## PG Data
 
 While this data is skewed right, since the sample size is 97, we will still perform statisitical analysis on this data. 
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 ggplot(PG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "aquamarine3", col = "black") 
 
 ggplot(PG_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "aquamarine3", col = "black") 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 #PG_Diff_G %>% select(Player, `Total Difference`) %>% arrange(desc(`Total Difference`))
 ```
 
 
 
 ## SG Data
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "orchid2", col = "black") 
 
 ggplot(SG_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "orchid2", col = "black") 
@@ -179,7 +179,7 @@ ggplot(SG_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500,
 
 
 ## SF Data
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 ggplot(SF_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "dodgerblue2", col = "black") 
 
 ggplot(SF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "dodgerblue2", col = "black") 
@@ -187,7 +187,7 @@ ggplot(SF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500,
 
 
 ## PF Data
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 ggplot(PF_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "darkgoldenrod3", col = "black") 
 
 ggplot(PF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "darkgoldenrod3", col = "black") 
@@ -195,7 +195,7 @@ ggplot(PF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500,
 
 
 ## C Data
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 ggplot(C_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "coral1", col = "black") 
 
 ggplot(C_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "coral1", col = "black") 
@@ -204,7 +204,7 @@ ggplot(C_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, 
 
 
 The average difference
-```{r, echo=F}
+```{r, echo=T, warning=FALSE, message=TRUE}
 summary(PG_Diff_G$`Total Difference`)
 
 ggplot(PG_Diff_G, aes(x = G, y = `Total Difference`, label = Player)) + geom_text(aes(label = Player), size = 2)
@@ -213,7 +213,7 @@ hist(PG_Diff_G$`Total Difference`)
 ```
 
 Only Outliers
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 #M = mean(PG_Diff_G$`Total Difference`)
 #S = sd(PG_Diff_G$`Total Difference`)
 #PG_Diff_G %>% filter(`Total Difference` > M + 2*S) 
@@ -221,7 +221,7 @@ Only Outliers
 
 ## Total Data
 Average of the difference for all positions
-```{r, echo=F, warning=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 
 ggplot(G_Diff, aes(x = `Total Difference`, color = Pos)) + geom_histogram(binwidth = 500, fill="white", alpha=0.5, position="identity")
 
@@ -234,19 +234,20 @@ ggplot(MP_Diff, aes(MP, `Total Difference`, label = rownames(Player))) + geom_te
 
 
 Who are the most average players across all statistics?
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 head(arrange(G_Diff, `Total Difference`))
 ```
 
 Excluding players who have played less than 20 games
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 head(arrange(filter(G_Diff, G_Diff$G >= 20), `Total Difference`)) 
 ```
 
 Assuming starters will play 75% of games (excluding injury) here are the most average starters
-```{r, echo=FALSE}
+```{r, echo=T, warning=FALSE, message=TRUE}
 head(arrange(filter(G_Diff, G_Diff$G >= 70), `Total Difference`)) 
 ```
+
 
 
 
