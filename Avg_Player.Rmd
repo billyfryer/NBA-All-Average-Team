@@ -265,6 +265,3 @@ head(arrange(filter(G_Diff, G_Diff$GS / G_Diff$G > 0.75), `Total Difference`))
 
 
 
-
-
-
