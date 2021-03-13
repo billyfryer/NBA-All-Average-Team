@@ -52,37 +52,38 @@ BRTotal_O <- BRTotal %>%
             X2P_P.Diff =abs(BRTotal$X2P_P - median(BRTotal$X2P_P)),
             eFG_P.Diff =abs(BRTotal$eFG_P - median(BRTotal$eFG_P)), 
             ORB.Diff = abs(BRTotal$ORB - median(BRTotal$ORB)),
-            DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB))  %>%
+            DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB)))  %>%
      # Scaling Differences
-     mutate(Age.Diff.S = scale(Age.Diff)),
-            G.Diff.S = scale(G.Diff)),
-            GS.Diff = scale(GS.Diff)),
-            MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
-            FG.Diff = abs(BRTotal$FG - median(BRTotal$FG)), 
-            FGA.Diff = abs(BRTotal$FGA - median(BRTotal$FGA)),
-            X3P.Diff = abs(BRTotal$X3P - median(BRTotal$X3P)),
-            X3PA.Diff = abs(BRTotal$X3PA- median(BRTotal$X3PA)),
-            X2P.Diff = abs(BRTotal$X2P - median(BRTotal$X2P)),
-            X2PA.Diff =abs(BRTotal$X2PA - median(BRTotal$X2PA)),
-            FT.Diff = abs(BRTotal$FT - median(BRTotal$FT)),
-            FTA.Diff =abs(BRTotal$FTA - median(BRTotal$FTA)),
-            TRB.Diff =abs(BRTotal$TRB - median(BRTotal$TRB)),
-            AST.Diff =abs(BRTotal$AST - median(BRTotal$AST)), 
-            STL.Diff =abs(BRTotal$STL - median(BRTotal$STL)), 
-            BLK.Diff =abs(BRTotal$BLK - median(BRTotal$BLK)),
-            TOV.Diff =abs(BRTotal$TOV - median(BRTotal$TOV)),
-            PF.Diff =abs(BRTotal$PF - median(BRTotal$PF)),
-            PTS.Diff =abs(BRTotal$PTS - median(BRTotal$PTS)),
-            FG_P.Diff =abs(BRTotal$FG_P - median(BRTotal$FG_P)),
-            FT_P.Diff =abs(BRTotal$FT_P - median(BRTotal$FT_P)),
-            X3P_P.Diff =abs(BRTotal$X3P_P - median(BRTotal$X3P_P)),
-            X2P_P.Diff =abs(BRTotal$X2P_P - median(BRTotal$X2P_P)),
-            eFG_P.Diff =abs(BRTotal$eFG_P - median(BRTotal$eFG_P)), 
-            ORB.Diff = abs(BRTotal$ORB - median(BRTotal$ORB)),
-            DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB))
+     mutate(Age.Diff.S = scale(Age.Diff),
+            G.Diff.S = scale(G.Diff),
+            GS.Diff.S = scale(GS.Diff),
+            MP.Diff.S = scale(MP.Diff),
+            FG.Diff.S = scale(FG.Diff), 
+            FGA.Diff.S = scale(FGA.Diff),
+            X3P.Diff.S = scale(X3P.Diff),
+            X3PA.Diff.S = scale(X3PA.Diff),
+            X2P.Diff.S = scale(X2P.Diff),
+            X2PA.Diff.S = scale(X2PA.Diff),
+            FT.Diff.S = scale(FT.Diff),
+            FTA.Diff.S = scale(FTA.Diff),
+            TRB.Diff.S = scale(TRB.Diff),
+            AST.Diff.S = scale(AST.Diff), 
+            STL.Diff.S = scale(STL.Diff), 
+            BLK.Diff.S = scale(BLK.Diff),
+            TOV.Diff.S = scale(TOV.Diff),
+            PF.Diff.S = scale(PF.Diff),
+            PTS.Diff.S = scale(PTS.Diff),
+            FG_P.Diff.S = scale(FG_P.Diff),
+            FT_P.Diff.S = scale(FT_P.Diff),
+            X3P_P.Diff.S = scale(X3P_P.Diff),
+            X2P_P.Diff.S = scale(X2P_P.Diff),
+            eFG_P.Diff.S = scale(eFG_P.Diff), 
+            ORB.Diff.S = scale(ORB.Diff),
+            DRB.Diff.S = scale(DRB.Diff)
                    ) %>%
-              select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
+              select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
 ```
+
 ```{r overall.g}
 #Creating a dataframe with the data divided by Games Played
 BRTotal_Filter_G <- BRTotal_O %>% select(MP:DRB.Diff) 
