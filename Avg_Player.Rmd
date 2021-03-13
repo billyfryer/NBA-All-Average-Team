@@ -1,22 +1,28 @@
 ```{r setup, echo=T, warning=FALSE, message=TRUE}
+library(readr)
 library(tidyverse)
+
+#Setting Working Directory
+setwd("C:\\Users\\Sherlock\\Documents\\R Projects\\NBA")
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- rename(BRTotal, Player = ï..Player)
+AverageData  <- select(BRTotal, Player, Pos, Tm, G, MP, GS, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
 
 #Finding the Stats for PGs
-PG_Data <- filter(BRTotal, Pos == "PG")
+PG_Data <- filter(AverageData, Pos == "PG")
 
 #Finding the Differences for each player from the averages
 PG_Sum_G <- select(PG_Data,FG:PTS) 
-PG_Totals_G <- colSums(PG_Sum_G)
+PG_Median <- apply(PG_Sum_G, 2, median)
 
-## Building the Data.Frame of the Differences for Games Played
+#Building the Dataframe of the Differences for Games Played
 
-# Average Games Played
-PG_Avg_G <- PG_Totals_G / sum(PG_Data$G)
-
-PG_Sum_G <- PG_Sum_G %>% mutate(abs(PG_Sum_G$FG - PG_Avg_G[1]), abs(PG_Sum_G$FGA - PG_Avg_G[2]), abs(PG_Sum_G$X3P - PG_Avg_G[3]), abs(PG_Sum_G$X3PA- PG_Avg_G[4]), abs(PG_Sum_G$X2P - PG_Avg_G[5]), abs(PG_Sum_G$X2PA - PG_Avg_G[6]), abs(PG_Sum_G$FT - PG_Avg_G[7]), abs(PG_Sum_G$FTA - PG_Avg_G[8]), abs(PG_Sum_G$TRB - PG_Avg_G[9]), abs(PG_Sum_G$AST - PG_Avg_G[10]), abs(PG_Sum_G$STL - PG_Avg_G[11]), abs(PG_Sum_G$BLK - PG_Avg_G[12]), abs(PG_Sum_G$TOV - PG_Avg_G[13]), abs(PG_Sum_G$PTS - PG_Avg_G[14]))
+PG_Sum_G <- PG_Sum_G %>% mutate(abs(PG_Sum_G$FG - PG_Median[1]), abs(PG_Sum_G$FGA - PG_Median[2]), abs(PG_Sum_G$X3P - PG_Median[3]), abs(PG_Sum_G$X3PA- PG_Median[4]), abs(PG_Sum_G$X2P - PG_Median[5]), abs(PG_Sum_G$X2PA - PG_Median[6]), abs(PG_Sum_G$FT - PG_Median[7]), abs(PG_Sum_G$FTA - PG_Median[8]), abs(PG_Sum_G$TRB - PG_Median[9]), abs(PG_Sum_G$AST - PG_Median[10]), abs(PG_Sum_G$STL - PG_Median[11]), abs(PG_Sum_G$BLK - PG_Median[12]), abs(PG_Sum_G$TOV - PG_Median[13]), abs(PG_Sum_G$PTS - PG_Median[14]))
+PG_Diff_G <- select(PG_Sum_G, 15:28)
+PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$GS, PG_Data$Pos)
+colnames(PG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
+PG_Diff_G <- select(PG_Diff_G, Player, `Total Difference`, G, GS, Pos)
 
 PG_Diff_G <- select(PG_Sum_G, 15:28)
 PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$GS, PG_Data$Pos)
