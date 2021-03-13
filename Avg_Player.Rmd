@@ -86,20 +86,20 @@ BRTotal_O <- BRTotal %>%
 
 ```{r overall.g}
 #Creating a dataframe with the data divided by Games Played
-BRTotal_Filter_G <- BRTotal_O %>% select(MP:DRB.Diff) 
+BRTotal_Filter_G <- BRTotal_O %>% select(MP:DRB.Diff.S) 
 BRTotal_G <- BRTotal_Filter_G %>% mutate_if(is.numeric, funs(./BRTotal$G))
 BRTotal_G <- mutate(BRTotal_G, 
                         Player = BRTotal_O$Player, 
                         Pos = BRTotal_O$Pos, 
                         Tm = BRTotal_O$Tm, 
                         Age = BRTotal_O$Age, 
-                        Age.Diff = BRTotal_O$Age.Diff, 
+                        Age.Diff.S = BRTotal_O$Age.Diff.S, 
                         G = BRTotal_O$G, 
-                        G.Diff = BRTotal_O$G.Diff, 
+                        G.Diff.S = BRTotal_O$G.Diff.S, 
                         GS = BRTotal_O$GS, 
-                        GS.Diff = BRTotal_O$GS.Diff,
+                        GS.Diff.S = BRTotal_O$GS.Diff.S,
                         MP = BRTotal_O$MP,
-                        MP.Diff = BRTotal_O$MP.Diff
+                        MP.Diff.S = BRTotal_O$MP.Diff.S
                         ) %>%
               select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
 
@@ -107,7 +107,7 @@ BRTotal_G <- mutate(BRTotal_G,
 
 ```{r overall.mp}
 #Creating a dataframe with the data divided by Minutes Played
-BRTotal_Filter_MP <- select(BRTotal_O,FG:DRB.Diff) 
+BRTotal_Filter_MP <- select(BRTotal_O,FG:DRB.Diff.S) 
 
 BRTotal_MP <- BRTotal_Filter_MP %>% mutate_if(is.numeric, funs(./BRTotal_O$MP))
 
@@ -134,22 +134,33 @@ BRTotal_MP <- BRTotal_MP %>%
                    eFG_P.Diff =abs(BRTotal_MP$eFG_P - median(BRTotal_MP$eFG_P)), 
                    ORB.Diff = abs(BRTotal_MP$ORB - median(BRTotal_MP$ORB)),
                    DRB.Diff = abs(BRTotal_MP$DRB - median(BRTotal_MP$DRB))
-                   )
-# Restructuring of Columns to make columns related to one another next to one another
-BRTotal_MP <- BRTotal_MP %>%
-             mutate(Player = BRTotal_O$Player, 
-                    Pos = BRTotal_O$Pos, 
-                    Tm = BRTotal_O$Tm, 
-                    Age = BRTotal_O$Age, 
-                    Age.Diff = BRTotal_O$Age.Diff, 
-                    G = BRTotal_O$G, 
-                    G.Diff = BRTotal_O$G.Diff, 
-                    GS = BRTotal_O$GS, 
-                    GS.Diff = BRTotal_O$GS.Diff,
-                    MP = BRTotal_O$MP, 
-                    MP.Diff = BRTotal_O$MP.Diff
-                    ) %>%
-  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
+                   ) %>%
+     # Scaling Differences
+     mutate(FG.Diff.S = scale(FG.Diff), 
+            FGA.Diff.S = scale(FGA.Diff),
+            X3P.Diff.S = scale(X3P.Diff),
+            X3PA.Diff.S = scale(X3PA.Diff),
+            X2P.Diff.S = scale(X2P.Diff),
+            X2PA.Diff.S = scale(X2PA.Diff),
+            FT.Diff.S = scale(FT.Diff),
+            FTA.Diff.S = scale(FTA.Diff),
+            TRB.Diff.S = scale(TRB.Diff),
+            AST.Diff.S = scale(AST.Diff), 
+            STL.Diff.S = scale(STL.Diff), 
+            BLK.Diff.S = scale(BLK.Diff),
+            TOV.Diff.S = scale(TOV.Diff),
+            PF.Diff.S = scale(PF.Diff),
+            PTS.Diff.S = scale(PTS.Diff),
+            FG_P.Diff.S = scale(FG_P.Diff),
+            FT_P.Diff.S = scale(FT_P.Diff),
+            X3P_P.Diff.S = scale(X3P_P.Diff),
+            X2P_P.Diff.S = scale(X2P_P.Diff),
+            eFG_P.Diff.S = scale(eFG_P.Diff), 
+            ORB.Diff.S = scale(ORB.Diff),
+            DRB.Diff.S = scale(DRB.Diff)
+                   ) %>%
+  # Restructuring of Columns to make columns related to one another next to one another
+              select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
 
 
 #Remove Intermediate Steps
