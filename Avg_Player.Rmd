@@ -68,7 +68,10 @@ BRTotal <- BRTotal %>% mutate_all(~replace(., is.na(.), 0))
 
 # Making Differences
 BRTotal_Stats <- BRTotal %>%
-     mutate(MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
+     mutate(Age.Diff = abs(BRTotal$Age - median(BRTotal$Age)),
+            G.Diff = abs(BRTotal$G - median(BRTotal$G)),
+            GS.Diff = abs(BRTotal$GS - median(BRTotal$GS)),
+            MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
             FG.Diff = abs(BRTotal$FG - median(BRTotal$FG)), 
             FGA.Diff = abs(BRTotal$FGA - median(BRTotal$FGA)),
             X3P.Diff = abs(BRTotal$X3P - median(BRTotal$X3P)),
@@ -91,7 +94,8 @@ BRTotal_Stats <- BRTotal %>%
             eFG_P.Diff =abs(BRTotal$eFG_P - median(BRTotal$eFG_P)), 
             ORB.Diff = abs(BRTotal$ORB - median(BRTotal$ORB)),
             DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB))
-                   )
+                   ) %>%
+              select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 
 #Creating a dataframe with the data divided by Games Played
 BRTotal_Filter_G <- BRTotal_Stats %>% select(MP:DRB.Diff) 
