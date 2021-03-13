@@ -289,235 +289,138 @@ SG_Data_MP <- mutate(SG_Data_MP,
 SG_Data_MP <- SG_Data_MP %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
-
-#Finding the Stats for SGs
-SG_Data <- filter(BRTotal, Pos == "SG")
-
-#Finding the Differences for each player from the averages
-SG_Sum_G <- select(SG_Data, FG:PTS)
-SG_Totals <- colSums(SG_Sum_G)
-
-#Building the Dataframe of the Differences
-SG_Avg_G <- SG_Totals / sum(SG_Data$G)
-SG_Sum_G <- SG_Sum_G %>% mutate(abs(SG_Sum_G$FG - SG_Avg_G[1]), abs(FGA - SG_Avg_G[2]), abs(SG_Sum_G$X3P - SG_Avg_G[3]), abs(SG_Sum_G$X3PA- SG_Avg_G[4]), abs(SG_Sum_G$X2P - SG_Avg_G[5]), abs(SG_Sum_G$X2PA - SG_Avg_G[6]), abs(SG_Sum_G$FT - SG_Avg_G[7]), abs(SG_Sum_G$FTA - SG_Avg_G[8]), abs(SG_Sum_G$TRB - SG_Avg_G[9]), abs(SG_Sum_G$AST - SG_Avg_G[10]), abs(SG_Sum_G$STL - SG_Avg_G[11]), abs(SG_Sum_G$BLK - SG_Avg_G[12]), abs(SG_Sum_G$TOV - SG_Avg_G[13]), abs(SG_Sum_G$PTS - SG_Avg_G[14]))
-SG_Diff_G <- select(SG_Sum_G, 15:28)
-SG_Diff_G <- SG_Diff_G %>% mutate(rowSums(SG_Diff_G), SG_Data$Player, SG_Data$G, SG_Data$GS, SG_Data$Pos)
-colnames(SG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-SG_Diff_G <- select(SG_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
-#Building the Dataframe of the Differences for Minutes Played
-SG_Sum_MP <- select(SG_Data,FG:PTS) 
-SG_Totals_MP <- colSums(SG_Sum_MP)
-
-SG_Avg_MP <- SG_Totals_MP / sum(SG_Data$MP)
-SG_Sum_MP <- SG_Sum_MP %>% mutate(abs(SG_Sum_MP$FG - SG_Avg_MP[1]), abs(SG_Sum_MP$FGA - SG_Avg_MP[2]), abs(SG_Sum_MP$X3P - SG_Avg_MP[3]), abs(SG_Sum_MP$X3PA- SG_Avg_MP[4]), abs(SG_Sum_MP$X2P - SG_Avg_MP[5]), abs(SG_Sum_MP$X2PA - SG_Avg_MP[6]), abs(SG_Sum_MP$FT - SG_Avg_MP[7]), abs(SG_Sum_MP$FTA - SG_Avg_MP[8]), abs(SG_Sum_MP$TRB - SG_Avg_MP[9]), abs(SG_Sum_MP$AST - SG_Avg_MP[10]), abs(SG_Sum_MP$STL - SG_Avg_MP[11]), abs(SG_Sum_MP$BLK - SG_Avg_MP[12]), abs(SG_Sum_MP$TOV - SG_Avg_MP[13]), abs(SG_Sum_MP$PTS - SG_Avg_MP[14]))
-SG_Diff_MP <- select(SG_Sum_MP, 15:28)
-SG_Diff_MP <- SG_Diff_MP %>% mutate(rowSums(SG_Diff_MP), SG_Data$Player, SG_Data$MP, SG_Data$Pos)
-colnames(SG_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "MP", "Pos")
-SG_Diff_MP <- select(SG_Diff_MP, Player, `Total Difference`, MP, Pos)
-
-#Finding the Stats for SFs
-SF_Data <- filter(BRTotal, Pos == "SF")
-
-#Finding the Differences for each player from the averages
-SF_Sum_G <- select(SF_Data, FG:PTS)
-SF_Totals <- colSums(SF_Sum_G)
-
-#Building the Dataframe of the Differences
-SF_Avg_G <- SF_Totals / sum(SF_Data$G)
-SF_Sum_G <- SF_Sum_G %>% mutate(abs(SF_Sum_G$FG - SF_Avg_G[1]), abs(SF_Sum_G$FGA - SF_Avg_G[2]), abs(SF_Sum_G$X3P - SF_Avg_G[3]), abs(SF_Sum_G$X3PA- SF_Avg_G[4]), abs(SF_Sum_G$X2P - SF_Avg_G[5]), abs(SF_Sum_G$X2PA - SF_Avg_G[6]), abs(SF_Sum_G$FT - SF_Avg_G[7]), abs(SF_Sum_G$FTA - SF_Avg_G[8]), abs(SF_Sum_G$TRB - SF_Avg_G[9]), abs(SF_Sum_G$AST - SF_Avg_G[10]), abs(SF_Sum_G$STL - SF_Avg_G[11]), abs(SF_Sum_G$BLK - SF_Avg_G[12]), abs(SF_Sum_G$TOV - SF_Avg_G[13]), abs(SF_Sum_G$PTS - SF_Avg_G[14]))
-SF_Diff_G <- select(SF_Sum_G, 15:28)
-SF_Diff_G <- SF_Diff_G %>% mutate(rowSums(SF_Diff_G), SF_Data$Player, SF_Data$G, SF_Data$GS, SF_Data$Pos)
-colnames(SF_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-SF_Diff_G <- select(SF_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
-#Building the Dataframe of the Differences for Minutes Played
-SF_Sum_MP <- select(SF_Data,FG:PTS) 
-SF_Totals_MP <- colSums(SF_Sum_MP)
-
-SF_Avg_MP <- SF_Totals_MP / sum(SF_Data$MP)
-SF_Sum_MP <- SF_Sum_MP %>% mutate(abs(SF_Sum_MP$FG - SF_Avg_MP[1]), abs(SF_Sum_MP$FGA - SF_Avg_MP[2]), abs(SF_Sum_MP$X3P - SF_Avg_MP[3]), abs(SF_Sum_MP$X3PA- SF_Avg_MP[4]), abs(SF_Sum_MP$X2P - SF_Avg_MP[5]), abs(SF_Sum_MP$X2PA - SF_Avg_MP[6]), abs(SF_Sum_MP$FT - SF_Avg_MP[7]), abs(SF_Sum_MP$FTA - SF_Avg_MP[8]), abs(SF_Sum_MP$TRB - SF_Avg_MP[9]), abs(SF_Sum_MP$AST - SF_Avg_MP[10]), abs(SF_Sum_MP$STL - SF_Avg_MP[11]), abs(SF_Sum_MP$BLK - SF_Avg_MP[12]), abs(SF_Sum_MP$TOV - SF_Avg_MP[13]), abs(SF_Sum_MP$PTS - SF_Avg_MP[14]))
-SF_Diff_MP <- select(SF_Sum_MP, 15:28)
-SF_Diff_MP <- SF_Diff_MP %>% mutate(rowSums(SF_Diff_MP), SF_Data$Player, SF_Data$MP, SF_Data$Pos)
-colnames(SF_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "MP", "Pos")
-SF_Diff_MP <- select(SF_Diff_MP, Player, `Total Difference`, MP, Pos)
-
-#Finding the Stats for PFs
-PF_Data <- filter(BRTotal, Pos == "PF")
-
-#Finding the Differences for each player from the averages
-PF_Sum_G <- select(PF_Data, FG:PTS)
-PF_Totals <- colSums(PF_Sum_G)
-
-#Building the Dataframe of the Differences
-PF_Avg_G <- PF_Totals / sum(PF_Data$G)
-PF_Sum_G <- PF_Sum_G %>% mutate(abs(PF_Sum_G$FG - PF_Avg_G[1]), abs(PF_Sum_G$FGA - PF_Avg_G[2]), abs(PF_Sum_G$X3P - PF_Avg_G[3]), abs(PF_Sum_G$X3PA- PF_Avg_G[4]), abs(PF_Sum_G$X2P - PF_Avg_G[5]), abs(PF_Sum_G$X2PA - PF_Avg_G[6]), abs(PF_Sum_G$FT - PF_Avg_G[7]), abs(PF_Sum_G$FTA - PF_Avg_G[8]), abs(PF_Sum_G$TRB - PF_Avg_G[9]), abs(PF_Sum_G$AST - PF_Avg_G[10]), abs(PF_Sum_G$STL - PF_Avg_G[11]), abs(PF_Sum_G$BLK - PF_Avg_G[12]), abs(PF_Sum_G$TOV - PF_Avg_G[13]), abs(PF_Sum_G$PTS - PF_Avg_G[14]))
-PF_Diff_G <- select(PF_Sum_G, 15:28)
-PF_Diff_G <- PF_Diff_G %>% mutate(rowSums(PF_Diff_G), PF_Data$Player, PF_Data$G, PF_Data$GS, PF_Data$Pos)
-colnames(PF_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-PF_Diff_G <- select(PF_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
-#Building the Dataframe of the Differences for Minutes Played
-PF_Sum_MP <- select(PF_Data,FG:PTS) 
-PF_Totals_MP <- colSums(PF_Sum_MP)
-
-PF_Avg_MP <- PF_Totals_MP / sum(PF_Data$MP)
-PF_Sum_MP <- PF_Sum_MP %>% mutate(abs(PF_Sum_MP$FG - PF_Avg_MP[1]), abs(PF_Sum_MP$FGA - PF_Avg_MP[2]), abs(PF_Sum_MP$X3P - PF_Avg_MP[3]), abs(PF_Sum_MP$X3PA- PF_Avg_MP[4]), abs(PF_Sum_MP$X2P - PF_Avg_MP[5]), abs(PF_Sum_MP$X2PA - PF_Avg_MP[6]), abs(PF_Sum_MP$FT - PF_Avg_MP[7]), abs(PF_Sum_MP$FTA - PF_Avg_MP[8]), abs(PF_Sum_MP$TRB - PF_Avg_MP[9]), abs(PF_Sum_MP$AST - PF_Avg_MP[10]), abs(PF_Sum_MP$STL - PF_Avg_MP[11]), abs(PF_Sum_MP$BLK - PF_Avg_MP[12]), abs(PF_Sum_MP$TOV - PF_Avg_MP[13]), abs(PF_Sum_MP$PTS - PF_Avg_MP[14]))
-PF_Diff_MP <- select(PF_Sum_MP, 15:28)
-PF_Diff_MP <- PF_Diff_MP %>% mutate(rowSums(PF_Diff_MP), PF_Data$Player, PF_Data$MP, PF_Data$Pos)
-colnames(PF_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "MP", "Pos")
-PF_Diff_MP <- select(PF_Diff_MP, Player, `Total Difference`, MP, Pos)
-
-
-#Finding the Stats for Cs
-C_Data  <- filter(BRTotal, Pos == "C")
-
-#Finding the Differences for each player from the averages
-C_Sum_G <- select(C_Data, FG:PTS)
-C_Totals <- colSums(C_Sum_G)
-
-#Building the Dataframe of the Differences
-C_Avg_G <- C_Totals / sum(C_Data$G)
-C_Sum_G <- C_Sum_G %>% mutate(abs(C_Sum_G$FG - C_Avg_G[1]), abs(C_Sum_G$FGA - C_Avg_G[2]), abs(C_Sum_G$X3P - C_Avg_G[3]), abs(C_Sum_G$X3PA- C_Avg_G[4]), abs(C_Sum_G$X2P - C_Avg_G[5]), abs(C_Sum_G$X2PA - C_Avg_G[6]), abs(C_Sum_G$FT - C_Avg_G[7]), abs(C_Sum_G$FTA - C_Avg_G[8]), abs(C_Sum_G$TRB - C_Avg_G[9]), abs(C_Sum_G$AST - C_Avg_G[10]), abs(C_Sum_G$STL - C_Avg_G[11]), abs(C_Sum_G$BLK - C_Avg_G[12]), abs(C_Sum_G$TOV - C_Avg_G[13]), abs(C_Sum_G$PTS - C_Avg_G[14]))
-C_Diff_G <- select(C_Sum_G, 15:28)
-C_Diff_G <- C_Diff_G %>% mutate(rowSums(C_Diff_G), C_Data$Player, C_Data$G, C_Data$GS, C_Data$Pos)
-colnames(C_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-C_Diff_G <- select(C_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
-#Building the Dataframe of the Differences for Minutes Played
-C_Sum_MP <- select(C_Data,FG:PTS) 
-C_Totals_MP <- colSums(C_Sum_MP)
-
-C_Avg_MP <- C_Totals_MP / sum(C_Data$MP)
-C_Sum_MP <- C_Sum_MP %>% mutate(abs(C_Sum_MP$FG - C_Avg_MP[1]), abs(C_Sum_MP$FGA - C_Avg_MP[2]), abs(C_Sum_MP$X3P - C_Avg_MP[3]), abs(C_Sum_MP$X3PA- C_Avg_MP[4]), abs(C_Sum_MP$X2P - C_Avg_MP[5]), abs(C_Sum_MP$X2PA - C_Avg_MP[6]), abs(C_Sum_MP$FT - C_Avg_MP[7]), abs(C_Sum_MP$FTA - C_Avg_MP[8]), abs(C_Sum_MP$TRB - C_Avg_MP[9]), abs(C_Sum_MP$AST - C_Avg_MP[10]), abs(C_Sum_MP$STL - C_Avg_MP[11]), abs(C_Sum_MP$BLK - C_Avg_MP[12]), abs(C_Sum_MP$TOV - C_Avg_MP[13]), abs(C_Sum_MP$PTS - C_Avg_MP[14]))
-C_Diff_MP <- select(C_Sum_MP, 15:28)
-C_Diff_MP <- C_Diff_MP %>% mutate(rowSums(C_Diff_MP), C_Data$Player, C_Data$MP, C_Data$Pos)
-colnames(C_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "MP", "Pos")
-C_Diff_MP <- select(C_Diff_MP, Player, `Total Difference`, MP, Pos)
-
-
-#Total Diff
-
-#Games
-G_Diff <- rbind(PG_Diff_G, SG_Diff_G)
-G_Diff <- rbind(G_Diff, SF_Diff_G)
-G_Diff <- rbind(G_Diff, PF_Diff_G)
-G_Diff <- rbind(G_Diff, C_Diff_G)
-
-#Minutes
-MP_Diff <- rbind(PG_Diff_MP, SG_Diff_MP)
-MP_Diff <- rbind(MP_Diff, SF_Diff_MP)
-MP_Diff <- rbind(MP_Diff, PF_Diff_MP)
-MP_Diff <- rbind(MP_Diff, C_Diff_MP)
+``` {r sf.overall}
+#Finding the Stats for PGs
+SF_Data <- BRTotal %>% filter(Pos == "SF") %>% drop_na()
+# Adding the absolute value Differentials for each player from the medians
+SF_Data <- SF_Data %>%
+            mutate(Age.Diff = abs(SF_Data$Age - median(SF_Data$Age)),
+                   G.Diff = abs(SF_Data$G - median(SF_Data$G)),
+                   GS.Diff = abs(SF_Data$GS - median(SF_Data$GS)),
+                   MP.Diff = abs(SF_Data$MP - median(SF_Data$MP)),
+                   FG.Diff = abs(SF_Data$FG - median(SF_Data$FG)), 
+                   FGA.Diff = abs(SF_Data$FGA - median(SF_Data$FGA)),
+                   X3P.Diff = abs(SF_Data$X3P - median(SF_Data$X3P)),
+                   X3PA.Diff = abs(SF_Data$X3PA- median(SF_Data$X3PA)),
+                   X2P.Diff = abs(SF_Data$X2P - median(SF_Data$X2P)),
+                   X2PA.Diff =abs(SF_Data$X2PA - median(SF_Data$X2PA)),
+                   FT.Diff = abs(SF_Data$FT - median(SF_Data$FT)),
+                   FTA.Diff =abs(SF_Data$FTA - median(SF_Data$FTA)),
+                   TRB.Diff =abs(SF_Data$TRB - median(SF_Data$TRB)),
+                   AST.Diff =abs(SF_Data$AST - median(SF_Data$AST)), 
+                   STL.Diff =abs(SF_Data$STL - median(SF_Data$STL)), 
+                   BLK.Diff =abs(SF_Data$BLK - median(SF_Data$BLK)),
+                   TOV.Diff =abs(SF_Data$TOV - median(SF_Data$TOV)),
+                   PF.Diff =abs(SF_Data$PF - median(SF_Data$PF)),
+                   PTS.Diff =abs(SF_Data$PTS - median(SF_Data$PTS)),
+                   FG_P.Diff =abs(SF_Data$FG_P - median(SF_Data$FG_P)),
+                   FT_P.Diff =abs(SF_Data$FT_P - median(SF_Data$FT_P)),
+                   X3P_P.Diff =abs(SF_Data$X3P_P - median(SF_Data$X3P_P)),
+                   X2P_P.Diff =abs(SF_Data$X2P_P - median(SF_Data$X2P_P)),
+                   eFG_P.Diff =abs(SF_Data$eFG_P - median(SF_Data$eFG_P)), 
+                   ORB.Diff = abs(SF_Data$ORB - median(SF_Data$ORB)),
+                   DRB.Diff = abs(SF_Data$DRB - median(SF_Data$DRB))
+                   )
+# Restructuring of Columns to make columns related to one another next to one another
+SF_Data <- SF_Data %>%
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
-## PG Data
+```{r sf.g, echo=FALSE}
+#Creating a dataframe with the data divided by Games Played
+SF_Filter_G <- select(SF_Data,MP:DRB.Diff) 
 
-While this data is skewed right, since the sample size is 97, we will still perform statisitical analysis on this data. 
-```{r, echo=T, warning=FALSE, message=TRUE}
-ggplot(PG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "aquamarine3", col = "black") 
+SF_Stats_G <- SF_Filter_G %>% mutate_if(is.numeric, funs(./SF_Data$G))
 
-ggplot(PG_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "aquamarine3", col = "black") 
+SF_Data_G <- SF_Stats_G %>%
+            mutate(MP.Diff = abs(SF_Stats_G$MP - median(SF_Stats_G$MP)),
+                   FG.Diff = abs(SF_Stats_G$FG - median(SF_Stats_G$FG)), 
+                   FGA.Diff = abs(SF_Stats_G$FGA - median(SF_Stats_G$FGA)),
+                   X3P.Diff = abs(SF_Stats_G$X3P - median(SF_Stats_G$X3P)),
+                   X3PA.Diff = abs(SF_Stats_G$X3PA- median(SF_Stats_G$X3PA)),
+                   X2P.Diff = abs(SF_Stats_G$X2P - median(SF_Stats_G$X2P)),
+                   X2PA.Diff =abs(SF_Stats_G$X2PA - median(SF_Stats_G$X2PA)),
+                   FT.Diff = abs(SF_Stats_G$FT - median(SF_Stats_G$FT)),
+                   FTA.Diff =abs(SF_Stats_G$FTA - median(SF_Stats_G$FTA)),
+                   TRB.Diff =abs(SF_Stats_G$TRB - median(SF_Stats_G$TRB)),
+                   AST.Diff =abs(SF_Stats_G$AST - median(SF_Stats_G$AST)), 
+                   STL.Diff =abs(SF_Stats_G$STL - median(SF_Stats_G$STL)), 
+                   BLK.Diff =abs(SF_Stats_G$BLK - median(SF_Stats_G$BLK)),
+                   TOV.Diff =abs(SF_Stats_G$TOV - median(SF_Stats_G$TOV)),
+                   PF.Diff =abs(SF_Stats_G$PF - median(SF_Stats_G$PF)),
+                   PTS.Diff =abs(SF_Stats_G$PTS - median(SF_Stats_G$PTS)),
+                   FG_P.Diff =abs(SF_Stats_G$FG_P - median(SF_Stats_G$FG_P)),
+                   FT_P.Diff =abs(SF_Stats_G$FT_P - median(SF_Stats_G$FT_P)),
+                   X3P_P.Diff =abs(SF_Stats_G$X3P_P - median(SF_Stats_G$X3P_P)),
+                   X2P_P.Diff =abs(SF_Stats_G$X2P_P - median(SF_Stats_G$X2P_P)),
+                   eFG_P.Diff =abs(SF_Stats_G$eFG_P - median(SF_Stats_G$eFG_P)), 
+                   ORB.Diff = abs(SF_Stats_G$ORB - median(SF_Stats_G$ORB)),
+                   DRB.Diff = abs(SF_Stats_G$DRB - median(SF_Stats_G$DRB))
+                   )
+# Restructuring of Columns to make columns related to one another next to one another
+SF_Data_G <- mutate(SF_Data_G, 
+                    Player = SF_Data$Player, 
+                    Pos = SF_Data$Pos, 
+                    Tm = SF_Data$Tm, 
+                    Age = SF_Data$Age, 
+                    Age.Diff = SF_Data$Age.Diff, 
+                    G = SF_Data$G, 
+                    G.Diff = SF_Data$G.Diff, 
+                    GS = SF_Data$GS, 
+                    GS.Diff = SF_Data$GS.Diff
+                    )
+
+SF_Data_G <- SF_Data_G %>%
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
-```{r, echo=T, warning=FALSE, message=TRUE}
-#PG_Diff_G %>% select(Player, `Total Difference`) %>% arrange(desc(`Total Difference`))
-```
+```{r sf.mp, echo=FALSE}
+#Creating a dataframe with the data divided by Minutes Played
+SF_Filter_MP <- select(SF_Data,FG:DRB.Diff) 
 
+SF_Stats_MP <- SF_Filter_MP %>% mutate_if(is.numeric, funs(./SF_Data$MP))
 
+SF_Data_MP <- SF_Stats_MP %>%
+            mutate(FG.Diff = abs(SF_Stats_MP$FG - median(SF_Stats_MP$FG)), 
+                   FGA.Diff = abs(SF_Stats_MP$FGA - median(SF_Stats_MP$FGA)),
+                   X3P.Diff = abs(SF_Stats_MP$X3P - median(SF_Stats_MP$X3P)),
+                   X3PA.Diff = abs(SF_Stats_MP$X3PA- median(SF_Stats_MP$X3PA)),
+                   X2P.Diff = abs(SF_Stats_MP$X2P - median(SF_Stats_MP$X2P)),
+                   X2PA.Diff =abs(SF_Stats_MP$X2PA - median(SF_Stats_MP$X2PA)),
+                   FT.Diff = abs(SF_Stats_MP$FT - median(SF_Stats_MP$FT)),
+                   FTA.Diff =abs(SF_Stats_MP$FTA - median(SF_Stats_MP$FTA)),
+                   TRB.Diff =abs(SF_Stats_MP$TRB - median(SF_Stats_MP$TRB)),
+                   AST.Diff =abs(SF_Stats_MP$AST - median(SF_Stats_MP$AST)), 
+                   STL.Diff =abs(SF_Stats_MP$STL - median(SF_Stats_MP$STL)), 
+                   BLK.Diff =abs(SF_Stats_MP$BLK - median(SF_Stats_MP$BLK)),
+                   TOV.Diff =abs(SF_Stats_MP$TOV - median(SF_Stats_MP$TOV)),
+                   PF.Diff =abs(SF_Stats_MP$PF - median(SF_Stats_MP$PF)),
+                   PTS.Diff =abs(SF_Stats_MP$PTS - median(SF_Stats_MP$PTS)),
+                   FG_P.Diff =abs(SF_Stats_MP$FG_P - median(SF_Stats_MP$FG_P)),
+                   FT_P.Diff =abs(SF_Stats_MP$FT_P - median(SF_Stats_MP$FT_P)),
+                   X3P_P.Diff =abs(SF_Stats_MP$X3P_P - median(SF_Stats_MP$X3P_P)),
+                   X2P_P.Diff =abs(SF_Stats_MP$X2P_P - median(SF_Stats_MP$X2P_P)),
+                   eFG_P.Diff =abs(SF_Stats_MP$eFG_P - median(SF_Stats_MP$eFG_P)), 
+                   ORB.Diff = abs(SF_Stats_MP$ORB - median(SF_Stats_MP$ORB)),
+                   DRB.Diff = abs(SF_Stats_MP$DRB - median(SF_Stats_MP$DRB))
+                   )
+# Restructuring of Columns to make columns related to one another next to one another
+SF_Data_MP <- mutate(SF_Data_MP, 
+                    Player = SF_Data$Player, 
+                    Pos = SF_Data$Pos, 
+                    Tm = SF_Data$Tm, 
+                    Age = SF_Data$Age, 
+                    Age.Diff = SF_Data$Age.Diff, 
+                    G = SF_Data$G, 
+                    G.Diff = SF_Data$G.Diff, 
+                    GS = SF_Data$GS, 
+                    GS.Diff = SF_Data$GS.Diff,
+                    MP = SF_Data$MP, 
+                    MP.Diff = SF_Data$MP.Diff
+                    )
 
-## SG Data
-```{r, echo=T, warning=FALSE, message=TRUE}
-ggplot(SG_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "orchid2", col = "black") 
-
-ggplot(SG_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "orchid2", col = "black") 
-```
-
-
-
-## SF Data
-```{r, echo=T, warning=FALSE, message=TRUE}
-ggplot(SF_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "dodgerblue2", col = "black") 
-
-ggplot(SF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "dodgerblue2", col = "black") 
-```
-
-
-## PF Data
-```{r, echo=T, warning=FALSE, message=TRUE}
-ggplot(PF_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "darkgoldenrod3", col = "black") 
-
-ggplot(PF_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "darkgoldenrod3", col = "black") 
-```
-
-
-## C Data
-```{r, echo=T, warning=FALSE, message=TRUE}
-ggplot(C_Diff_G, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "coral1", col = "black") 
-
-ggplot(C_Diff_MP, aes(x = `Total Difference`)) + geom_histogram(binwidth = 500, fill = "coral1", col = "black") 
-```
-
-
-
-The average difference
-```{r, echo=T, warning=FALSE, message=TRUE}
-summary(PG_Diff_G$`Total Difference`)
-
-ggplot(PG_Diff_G, aes(x = G, y = `Total Difference`, label = Player)) + geom_text(aes(label = Player), size = 2)
-
-hist(PG_Diff_G$`Total Difference`)
-```
-
-Only Outliers
-```{r, echo=T, warning=FALSE, message=TRUE}
-#M = mean(PG_Diff_G$`Total Difference`)
-#S = sd(PG_Diff_G$`Total Difference`)
-#PG_Diff_G %>% filter(`Total Difference` > M + 2*S) 
-```
-
-## Total Data
-Averages
-```{R, echo=T,  warning=FALSE, message=TRUE}
-PG_Avg_G
-SG_Avg_G
-SF_Avg_G
-PF_Avg_G
-C_Avg_G
-
-PG_Avg_MP
-SG_Avg_MP
-SF_Avg_MP
-PF_Avg_MP
-C_Avg_MP
-```
-
-Average of the difference for all positions
-```{r, echo=T, warning=FALSE, message=TRUE}
-
-ggplot(G_Diff, aes(x = `Total Difference`, color = Pos)) + geom_histogram(binwidth = 500, fill="white", alpha=0.5, position="identity")
-
-#Games
-ggplot(G_Diff, aes(G, `Total Difference`, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 2, check_overlap = TRUE) + geom_smooth(method="glm", se=FALSE, color = "black")
-
-#Minutes
-ggplot(MP_Diff, aes(MP, `Total Difference`, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 2, check_overlap = TRUE) + geom_smooth(method="glm", se=FALSE, color = "black")
-```
-
-
-Who are the most average players across all statistics?
-```{r, echo=T, warning=FALSE, message=TRUE}
-head(arrange(G_Diff, `Total Difference`))
-```
-
-Excluding players who have played less than 20 games
-```{r, echo=T, warning=FALSE, message=TRUE}
-head(arrange(filter(G_Diff, G_Diff$G >= 20), `Total Difference`)) 
-```
-
-Assuming starters will play 75% of games (excluding injury) here are the most average starters
-```{r, echo=T, warning=FALSE, message=TRUE}
-head(arrange(filter(G_Diff, G_Diff$GS / G_Diff$G > 0.75), `Total Difference`)) 
+SF_Data_MP <- SF_Data_MP %>%
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
 
