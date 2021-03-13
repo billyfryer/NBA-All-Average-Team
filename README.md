@@ -1,6 +1,6 @@
 # NBA All Average Team Project
 
-This is a project by David Roycroft and Tyson King, with small contributions by Billy Fryer. We are all students
+This is a project by David Roycroft and Billy Fryer. We are all students
 at North Carolina State University in the Sports Analytics Club there. This project will be presented at the
 first ever SAC Poster Competition in April 2021.
 
