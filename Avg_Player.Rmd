@@ -101,7 +101,7 @@ BRTotal_G <- mutate(BRTotal_G,
                         MP = BRTotal_O$MP,
                         MP.Diff = BRTotal_O$MP.Diff
                         ) %>%
-              select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
+              select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
 
 ```
 
@@ -136,8 +136,8 @@ BRTotal_MP <- BRTotal_MP %>%
                    DRB.Diff = abs(BRTotal_MP$DRB - median(BRTotal_MP$DRB))
                    )
 # Restructuring of Columns to make columns related to one another next to one another
-BRTotal_MP <- mutate(BRTotal_MP, 
-                    Player = BRTotal_O$Player, 
+BRTotal_MP <- BRTotal_MP %>%
+             mutate(Player = BRTotal_O$Player, 
                     Pos = BRTotal_O$Pos, 
                     Tm = BRTotal_O$Tm, 
                     Age = BRTotal_O$Age, 
@@ -148,10 +148,9 @@ BRTotal_MP <- mutate(BRTotal_MP,
                     GS.Diff = BRTotal_O$GS.Diff,
                     MP = BRTotal_O$MP, 
                     MP.Diff = BRTotal_O$MP.Diff
-                    )
-
-BRTotal_MP <- BRTotal_MP %>%
+                    ) %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
+
 
 #Remove Intermediate Steps
 rm(BRTotal_Filter_G);rm(BRTotal_Filter_MP)
