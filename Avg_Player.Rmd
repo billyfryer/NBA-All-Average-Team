@@ -1,6 +1,4 @@
-```{r setup, echo=T, warning=FALSE, message=TRUE}
-library(readr)
-library(tidyverse)
+```{r, echo=FALSE}
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- BRTotal %>% rename(Player = ï..Player,
@@ -9,13 +7,11 @@ BRTotal <- BRTotal %>% rename(Player = ï..Player,
                               X3P_P = X3P.,
                               X2P_P = X2P.,
                               eFG_P = eFG.)
-
 ```
 
 ``` {r pg.overall}
 #Finding the Stats for PGs
 PG_Data <- BRTotal %>% filter(Pos == "PG") %>% drop_na()
-
 # Adding the absolute value Differentials for each player from the medians
 PG_Data <- PG_Data %>%
             mutate(Age.Diff = abs(PG_Data$Age - median(PG_Data$Age)),
@@ -41,12 +37,64 @@ PG_Data <- PG_Data %>%
                    FT_P.Diff =abs(PG_Data$FT_P - median(PG_Data$FT_P)),
                    X3P_P.Diff =abs(PG_Data$X3P_P - median(PG_Data$X3P_P)),
                    X2P_P.Diff =abs(PG_Data$X2P_P - median(PG_Data$X2P_P)),
-                   eFG_P.Diff =abs(PG_Data$eFG_P - median(PG_Data$eFG_P))
+                   eFG_P.Diff =abs(PG_Data$eFG_P - median(PG_Data$eFG_P)), 
+                   ORB.Diff = abs(PG_Data$ORB - median(PG_Data$ORB)),
+                   DRB.Diff = abs(PG_Data$DRB - median(PG_Data$DRB))
                    )
-
 # Restructuring of Columns to make columns related to one another next to one another
 PG_Data <- PG_Data %>%
-  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff)
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
+
+```
+
+```{r, echo=FALSE}
+#Creating a dataframe with the data divided by Games Played
+PG_Filter_G <- select(PG_Data,MP:DRB.Diff) 
+
+PG_Stats_G <- PG_Filter_G %>% mutate_if(is.numeric, funs(./PG_Data$G))
+```
+
+```{r, echo=FALSE}
+PG_Data_G <- PG_Stats_G %>%
+            mutate(MP.Diff = abs(PG_Stats_G$MP - median(PG_Stats_G$MP)),
+                   FG.Diff = abs(PG_Stats_G$FG - median(PG_Stats_G$FG)), 
+                   FGA.Diff = abs(PG_Stats_G$FGA - median(PG_Stats_G$FGA)),
+                   X3P.Diff = abs(PG_Stats_G$X3P - median(PG_Stats_G$X3P)),
+                   X3PA.Diff = abs(PG_Stats_G$X3PA- median(PG_Stats_G$X3PA)),
+                   X2P.Diff = abs(PG_Stats_G$X2P - median(PG_Stats_G$X2P)),
+                   X2PA.Diff =abs(PG_Stats_G$X2PA - median(PG_Stats_G$X2PA)),
+                   FT.Diff = abs(PG_Stats_G$FT - median(PG_Stats_G$FT)),
+                   FTA.Diff =abs(PG_Stats_G$FTA - median(PG_Stats_G$FTA)),
+                   TRB.Diff =abs(PG_Stats_G$TRB - median(PG_Stats_G$TRB)),
+                   AST.Diff =abs(PG_Stats_G$AST - median(PG_Stats_G$AST)), 
+                   STL.Diff =abs(PG_Stats_G$STL - median(PG_Stats_G$STL)), 
+                   BLK.Diff =abs(PG_Stats_G$BLK - median(PG_Stats_G$BLK)),
+                   TOV.Diff =abs(PG_Stats_G$TOV - median(PG_Stats_G$TOV)),
+                   PF.Diff =abs(PG_Stats_G$PF - median(PG_Stats_G$PF)),
+                   PTS.Diff =abs(PG_Stats_G$PTS - median(PG_Stats_G$PTS)),
+                   FG_P.Diff =abs(PG_Stats_G$FG_P - median(PG_Stats_G$FG_P)),
+                   FT_P.Diff =abs(PG_Stats_G$FT_P - median(PG_Stats_G$FT_P)),
+                   X3P_P.Diff =abs(PG_Stats_G$X3P_P - median(PG_Stats_G$X3P_P)),
+                   X2P_P.Diff =abs(PG_Stats_G$X2P_P - median(PG_Stats_G$X2P_P)),
+                   eFG_P.Diff =abs(PG_Stats_G$eFG_P - median(PG_Stats_G$eFG_P)), 
+                   ORB.Diff = abs(PG_Stats_G$ORB - median(PG_Stats_G$ORB)),
+                   DRB.Diff = abs(PG_Stats_G$DRB - median(PG_Stats_G$DRB))
+                   )
+# Restructuring of Columns to make columns related to one another next to one another
+PG_Data_G <- mutate(PG_Data_G, 
+                    Player = PG_Data$Player, 
+                    Pos = PG_Data$Pos, 
+                    Tm = PG_Data$Tm, 
+                    Age = PG_Data$Age, 
+                    Age.Diff = PG_Data$Age.Diff, 
+                    G = PG_Data$G, 
+                    G.Diff = PG_Data$G.Diff, 
+                    GS = PG_Data$GS, 
+                    GS.Diff = PG_Data$GS.Diff
+                    )
+
+PG_Data_G <- PG_Data_G %>%
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
 ``` {r new}
