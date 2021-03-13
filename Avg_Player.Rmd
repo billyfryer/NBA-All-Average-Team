@@ -1,22 +1,23 @@
-
 ```{r setup, echo=T, warning=FALSE, message=TRUE}
-library(readr)
 library(tidyverse)
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- rename(BRTotal, Player = ï..Player)
-AverageData  <- select(BRTotal, Player, Pos, Tm, G, MP, GS, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
 
 #Finding the Stats for PGs
-PG_Data <- filter(AverageData, Pos == "PG")
+PG_Data <- filter(BRTotal, Pos == "PG")
 
 #Finding the Differences for each player from the averages
 PG_Sum_G <- select(PG_Data,FG:PTS) 
 PG_Totals_G <- colSums(PG_Sum_G)
 
-#Building the Dataframe of the Differences for Games Played
+## Building the Data.Frame of the Differences for Games Played
+
+# Average Games Played
 PG_Avg_G <- PG_Totals_G / sum(PG_Data$G)
+
 PG_Sum_G <- PG_Sum_G %>% mutate(abs(PG_Sum_G$FG - PG_Avg_G[1]), abs(PG_Sum_G$FGA - PG_Avg_G[2]), abs(PG_Sum_G$X3P - PG_Avg_G[3]), abs(PG_Sum_G$X3PA- PG_Avg_G[4]), abs(PG_Sum_G$X2P - PG_Avg_G[5]), abs(PG_Sum_G$X2PA - PG_Avg_G[6]), abs(PG_Sum_G$FT - PG_Avg_G[7]), abs(PG_Sum_G$FTA - PG_Avg_G[8]), abs(PG_Sum_G$TRB - PG_Avg_G[9]), abs(PG_Sum_G$AST - PG_Avg_G[10]), abs(PG_Sum_G$STL - PG_Avg_G[11]), abs(PG_Sum_G$BLK - PG_Avg_G[12]), abs(PG_Sum_G$TOV - PG_Avg_G[13]), abs(PG_Sum_G$PTS - PG_Avg_G[14]))
+
 PG_Diff_G <- select(PG_Sum_G, 15:28)
 PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$GS, PG_Data$Pos)
 colnames(PG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
@@ -34,7 +35,7 @@ colnames(PG_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TR
 PG_Diff_MP <- select(PG_Diff_MP, Player, `Total Difference`, MP, Pos)
 
 #Finding the Stats for SGs
-SG_Data <- filter(AverageData, Pos == "SG")
+SG_Data <- filter(BRTotal, Pos == "SG")
 
 #Finding the Differences for each player from the averages
 SG_Sum_G <- select(SG_Data, FG:PTS)
@@ -60,7 +61,7 @@ colnames(SG_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TR
 SG_Diff_MP <- select(SG_Diff_MP, Player, `Total Difference`, MP, Pos)
 
 #Finding the Stats for SFs
-SF_Data <- filter(AverageData, Pos == "SF")
+SF_Data <- filter(BRTotal, Pos == "SF")
 
 #Finding the Differences for each player from the averages
 SF_Sum_G <- select(SF_Data, FG:PTS)
@@ -86,7 +87,7 @@ colnames(SF_Diff_MP) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TR
 SF_Diff_MP <- select(SF_Diff_MP, Player, `Total Difference`, MP, Pos)
 
 #Finding the Stats for PFs
-PF_Data <- filter(AverageData, Pos == "PF")
+PF_Data <- filter(BRTotal, Pos == "PF")
 
 #Finding the Differences for each player from the averages
 PF_Sum_G <- select(PF_Data, FG:PTS)
@@ -113,7 +114,7 @@ PF_Diff_MP <- select(PF_Diff_MP, Player, `Total Difference`, MP, Pos)
 
 
 #Finding the Stats for Cs
-C_Data  <- filter(AverageData, Pos == "C")
+C_Data  <- filter(BRTotal, Pos == "C")
 
 #Finding the Differences for each player from the averages
 C_Sum_G <- select(C_Data, FG:PTS)
