@@ -2,34 +2,54 @@
 library(readr)
 library(tidyverse)
 
-#Setting Working Directory
-setwd("C:\\Users\\Sherlock\\Documents\\R Projects\\NBA")
-
 BRTotal <- read.csv("2019_20_BRTotal.csv")
-BRTotal <- rename(BRTotal, Player = ï..Player)
-AverageData  <- select(BRTotal, Player, Pos, Tm, G, MP, GS, FG, FGA, X3P, X3PA, X2P, X2PA, FT, FTA, TRB, AST, STL, BLK, TOV, PTS)
+BRTotal <- BRTotal %>% rename(Player = ï..Player,
+                              FG_P = FG.,
+                              FT_P = FT.,
+                              X3P_P = X3P.,
+                              X2P_P = X2P.,
+                              eFG_P = eFG.)
 
+```
+
+``` {r pg.overall}
 #Finding the Stats for PGs
-PG_Data <- filter(AverageData, Pos == "PG")
+PG_Data <- BRTotal %>% filter(Pos == "PG") %>% drop_na()
 
-#Finding the Differences for each player from the averages
-PG_Sum_G <- select(PG_Data,FG:PTS) 
-PG_Test <- PG_Sum_G %>% mutate_if(is.numeric, funs(./PG_Data$G))
-PG_Median_G <- apply(PG_Test, 2, median)
+# Adding the absolute value Differentials for each player from the medians
+PG_Data <- PG_Data %>%
+            mutate(Age.Diff = abs(PG_Data$Age - median(PG_Data$Age)),
+                   G.Diff = abs(PG_Data$G - median(PG_Data$G)),
+                   GS.Diff = abs(PG_Data$GS - median(PG_Data$GS)),
+                   MP.Diff = abs(PG_Data$MP - median(PG_Data$MP)),
+                   FG.Diff = abs(PG_Data$FG - median(PG_Data$FG)), 
+                   FGA.Diff = abs(PG_Data$FGA - median(PG_Data$FGA)),
+                   X3P.Diff = abs(PG_Data$X3P - median(PG_Data$X3P)),
+                   X3PA.Diff = abs(PG_Data$X3PA- median(PG_Data$X3PA)),
+                   X2P.Diff = abs(PG_Data$X2P - median(PG_Data$X2P)),
+                   X2PA.Diff =abs(PG_Data$X2PA - median(PG_Data$X2PA)),
+                   FT.Diff = abs(PG_Data$FT - median(PG_Data$FT)),
+                   FTA.Diff =abs(PG_Data$FTA - median(PG_Data$FTA)),
+                   TRB.Diff =abs(PG_Data$TRB - median(PG_Data$TRB)),
+                   AST.Diff =abs(PG_Data$AST - median(PG_Data$AST)), 
+                   STL.Diff =abs(PG_Data$STL - median(PG_Data$STL)), 
+                   BLK.Diff =abs(PG_Data$BLK - median(PG_Data$BLK)),
+                   TOV.Diff =abs(PG_Data$TOV - median(PG_Data$TOV)),
+                   PF.Diff =abs(PG_Data$PF - median(PG_Data$PF)),
+                   PTS.Diff =abs(PG_Data$PTS - median(PG_Data$PTS)),
+                   FG_P.Diff =abs(PG_Data$FG_P - median(PG_Data$FG_P)),
+                   FT_P.Diff =abs(PG_Data$FT_P - median(PG_Data$FT_P)),
+                   X3P_P.Diff =abs(PG_Data$X3P_P - median(PG_Data$X3P_P)),
+                   X2P_P.Diff =abs(PG_Data$X2P_P - median(PG_Data$X2P_P)),
+                   eFG_P.Diff =abs(PG_Data$eFG_P - median(PG_Data$eFG_P))
+                   )
 
-#Building the Dataframe of the Differences for Games Played
+# Restructuring of Columns to make columns related to one another next to one another
+PG_Data <- PG_Data %>%
+  select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff)
+```
 
-PG_Sum_G <- PG_Sum_G %>% mutate(abs(PG_Sum_G$FG - PG_Median[1]), abs(PG_Sum_G$FGA - PG_Median[2]), abs(PG_Sum_G$X3P - PG_Median[3]), abs(PG_Sum_G$X3PA- PG_Median[4]), abs(PG_Sum_G$X2P - PG_Median[5]), abs(PG_Sum_G$X2PA - PG_Median[6]), abs(PG_Sum_G$FT - PG_Median[7]), abs(PG_Sum_G$FTA - PG_Median[8]), abs(PG_Sum_G$TRB - PG_Median[9]), abs(PG_Sum_G$AST - PG_Median[10]), abs(PG_Sum_G$STL - PG_Median[11]), abs(PG_Sum_G$BLK - PG_Median[12]), abs(PG_Sum_G$TOV - PG_Median[13]), abs(PG_Sum_G$PTS - PG_Median[14]))
-PG_Diff_G <- select(PG_Sum_G, 15:28)
-PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$GS, PG_Data$Pos)
-colnames(PG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-PG_Diff_G <- select(PG_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
-PG_Diff_G <- select(PG_Sum_G, 15:28)
-PG_Diff_G <- PG_Diff_G %>% mutate(rowSums(PG_Diff_G), PG_Data$Player, PG_Data$G, PG_Data$GS, PG_Data$Pos)
-colnames(PG_Diff_G) = c("FG", "FGA", "3P", "3PA", "2P", "2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PTS", "Total Difference", "Player", "G", "GS", "Pos")
-PG_Diff_G <- select(PG_Diff_G, Player, `Total Difference`, G, GS, Pos)
-
+``` {r new}
 #Building the Dataframe of the Differences for Minutes Played
 PG_Sum_MP <- select(PG_Data,FG:PTS) 
 PG_Totals_MP <- colSums(PG_Sum_MP)
