@@ -53,10 +53,10 @@ BRTotal_O <- BRTotal %>%
             eFG_P.Diff =abs(BRTotal$eFG_P - median(BRTotal$eFG_P)), 
             ORB.Diff = abs(BRTotal$ORB - median(BRTotal$ORB)),
             DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB))  %>%
-     # Scaled Differences
+     # Scaling Differences
      mutate(Age.Diff.S = scale(Age.Diff)),
             G.Diff.S = scale(G.Diff)),
-            GS.Diff = abs(BRTotal$GS - median(BRTotal$GS)),
+            GS.Diff = scale(GS.Diff)),
             MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
             FG.Diff = abs(BRTotal$FG - median(BRTotal$FG)), 
             FGA.Diff = abs(BRTotal$FGA - median(BRTotal$FGA)),
