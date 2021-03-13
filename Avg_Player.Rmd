@@ -1,6 +1,8 @@
+# Reading in Overall Data
 ```{r, echo=FALSE}
 
 BRTotal <- read.csv("2019_20_BRTotal.csv")
+# Changing a few variable names
 BRTotal <- BRTotal %>% rename(Player = ï..Player,
                               FG_P = FG.,
                               FT_P = FT.,
@@ -9,6 +11,7 @@ BRTotal <- BRTotal %>% rename(Player = ï..Player,
                               eFG_P = eFG.)
 ```
 
+# PG Overall Stats
 ``` {r pg.overall}
 #Finding the Stats for PGs
 PG_Data <- BRTotal %>% filter(Pos == "PG") %>% drop_na()
@@ -46,6 +49,8 @@ PG_Data <- PG_Data %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 
 ```
+
+# PG Stats Per Game
 
 ```{r pg.g, echo=FALSE}
 #Creating a dataframe with the data divided by Games Played
@@ -95,6 +100,7 @@ PG_Data_G <- PG_Data_G %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
+# PG Stats Per Minutes Played
 
 ```{r pg.mp, echo=FALSE}
 #Creating a dataframe with the data divided by Minutes Played
@@ -144,6 +150,7 @@ PG_Data_MP <- mutate(PG_Data_MP,
 PG_Data_MP <- PG_Data_MP %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
+# SG Overall Stats
 
 ``` {r sg.overall}
 #Finding the Stats for PGs
@@ -181,6 +188,8 @@ SG_Data <- SG_Data %>%
 SG_Data <- SG_Data %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
+
+# SG Stats Per Game
 
 ```{r sg.g, echo=FALSE}
 #Creating a dataframe with the data divided by Games Played
@@ -230,6 +239,7 @@ SG_Data_G <- SG_Data_G %>%
   select(Player, Pos, Tm, Age, Age.Diff, G, G.Diff, GS, GS.Diff, MP, MP.Diff, FG, FG.Diff, FGA, FGA.Diff, X3P, X3P.Diff, X3PA, X3PA.Diff, X2P, X2P.Diff, X2PA, X2PA.Diff, FT, FT.Diff, FTA, FTA.Diff, TRB, TRB.Diff, AST, AST.Diff, STL, STL.Diff, BLK, BLK.Diff, TOV, TOV.Diff, PF, PF.Diff, PTS, PTS.Diff, FG_P, FG_P.Diff, FT_P, FT_P.Diff, X3P_P, X3P_P.Diff, X2P_P, X2P_P.Diff, eFG_P, eFG_P.Diff, ORB, ORB.Diff, DRB, DRB.Diff)
 ```
 
+# SG Stats Per Minutes Played
 
 ```{r sg.mp, echo=FALSE}
 #Creating a dataframe with the data divided by Minutes Played
