@@ -119,3 +119,23 @@ BRTotal_MP <- BRTotal_MP %>%
 rm(BRTotal_Filter_G);rm(BRTotal_Filter_MP)
 
 ```
+#Filter PG Data
+```{r pg}
+PG_O <- filter(BRTotal_O, Pos == "PG")
+PG_G <- filter(BRTotal_G, Pos == "PG")
+PG_MP <- filter(BRTotal_MP, Pos == "PG")
+```
+
+#Filter SG Data
+```{r sg}
+SG_O <- filter(BRTotal_O, Pos == "SG")
+SG_G <- filter(BRTotal_G, Pos == "SG")
+SG_MP <- filter(BRTotal_MP, Pos == "SG")
+```
+
+#Filter SF Data
+```{r sf}
+SF_O <- filter(BRTotal_O, Pos == "SF")
+SF_G <- filter(BRTotal_G, Pos == "SF")
+SF_MP <- filter(BRTotal_MP, Pos == "SF")
+```
