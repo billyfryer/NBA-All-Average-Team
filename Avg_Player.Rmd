@@ -2,6 +2,14 @@
 library(tidyverse)
 ```
 
+# Scaling Function
+$\frac{x_i - min(x)} {max(x)- min(x)}$
+
+```{r scaling.function}
+scale <- function(vector) {
+  return (vector - min(vector)) /(max(vector) - min(vector))
+}
+```
 
 # Scaling Function
 $\frac{x_i - min(x)} {max(x)- min(x)}$
@@ -102,15 +110,12 @@ BRTotal_G <- mutate(BRTotal_G,
                         MP.Diff.S = BRTotal_O$MP.Diff.S
                         ) %>%
               select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
-
 ```
 
 ```{r overall.mp}
 #Creating a dataframe with the data divided by Minutes Played
 BRTotal_Filter_MP <- select(BRTotal_O,FG:DRB.Diff.S) 
-
 BRTotal_MP <- BRTotal_Filter_MP %>% mutate_if(is.numeric, funs(./BRTotal_O$MP))
-
 BRTotal_MP <- BRTotal_MP %>%
             mutate(FG.Diff = abs(BRTotal_MP$FG - median(BRTotal_MP$FG)), 
                    FGA.Diff = abs(BRTotal_MP$FGA - median(BRTotal_MP$FGA)),
@@ -159,14 +164,37 @@ BRTotal_MP <- BRTotal_MP %>%
             ORB.Diff.S = scale(ORB.Diff),
             DRB.Diff.S = scale(DRB.Diff)
                    ) %>%
+            mutate(Player = BRTotal_O$Player, 
+                        Pos = BRTotal_O$Pos, 
+                        Tm = BRTotal_O$Tm, 
+                        Age = BRTotal_O$Age, 
+                        Age.Diff.S = BRTotal_O$Age.Diff.S, 
+                        G = BRTotal_O$G, 
+                        G.Diff.S = BRTotal_O$G.Diff.S, 
+                        GS = BRTotal_O$GS, 
+                        GS.Diff.S = BRTotal_O$GS.Diff.S,
+                        MP = BRTotal_O$MP,
+                        MP.Diff.S = BRTotal_O$MP.Diff.S
+                        ) %>%
   # Restructuring of Columns to make columns related to one another next to one another
               select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
-
-
 #Remove Intermediate Steps
 rm(BRTotal_Filter_G);rm(BRTotal_Filter_MP)
-
 ```
+
+```{r sums}
+O_Sums <- BRTotal_O %>% select(contains(".S"))
+BRTotal_O <- BRTotal_O %>% mutate(SScD = rowSums(O_Sums))
+
+G_Sums <- BRTotal_G %>% select(contains(".S")) 
+BRTotal_G <- BRTotal_G %>% mutate(SScD = rowSums(G_Sums))
+
+MP_Sums <- BRTotal_MP %>% select(contains(".S")) 
+BRTotal_MP <- BRTotal_MP %>% mutate(SScD = rowSums(MP_Sums))
+
+rm(O_Sums);rm(G_Sums);rm(MP_Sums)
+```
+
 #Filter PG Data
 ```{r pg}
 PG_O <- filter(BRTotal_O, Pos == "PG")
@@ -188,21 +216,16 @@ SF_G <- filter(BRTotal_G, Pos == "SF")
 SF_MP <- filter(BRTotal_MP, Pos == "SF")
 ```
 
-#Filter Center Data
-```{r c}
-C_G <- BRTotal_G %>% filter(Pos=="C")
-
-C_MP <- BRTotal_MP %>% filter(Pos=="C")
-
-C_O <- BRTotal_O %>% filter(Pos=="C")
-```
-
 #Filter Power Forward
 ```{r pf}
 PF_G <- BRTotal_G %>% filter(Pos=="PF")
-
 PF_MP <- BRTotal_MP %>% filter(Pos=="PF")
-
 PF_O <- BRTotal_O %>% filter(Pos=="PF")
 ```
 
+#Filter Center Data
+```{r c}
+C_G <- BRTotal_G %>% filter(Pos=="C")
+C_MP <- BRTotal_MP %>% filter(Pos=="C")
+C_O <- BRTotal_O %>% filter(Pos=="C")
+```
