@@ -2,6 +2,16 @@
 library(tidyverse)
 ```
 
+
+# Scaling Function
+$\frac{x_i - min(x)} {max(x)- min(x)}$
+
+```{r scaling.function}
+scale <- function(vector) {
+  return (vector - min(vector)) /(max(vector) - min(vector))
+}
+```
+
 # Overall Stats Per Game
 
 ```{r overall, echo=FALSE}
@@ -19,6 +29,33 @@ BRTotal <- BRTotal %>% mutate_all(~replace(., is.na(.), 0))
 BRTotal_O <- BRTotal %>%
      mutate(Age.Diff = abs(BRTotal$Age - median(BRTotal$Age)),
             G.Diff = abs(BRTotal$G - median(BRTotal$G)),
+            GS.Diff = abs(BRTotal$GS - median(BRTotal$GS)),
+            MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
+            FG.Diff = abs(BRTotal$FG - median(BRTotal$FG)), 
+            FGA.Diff = abs(BRTotal$FGA - median(BRTotal$FGA)),
+            X3P.Diff = abs(BRTotal$X3P - median(BRTotal$X3P)),
+            X3PA.Diff = abs(BRTotal$X3PA- median(BRTotal$X3PA)),
+            X2P.Diff = abs(BRTotal$X2P - median(BRTotal$X2P)),
+            X2PA.Diff =abs(BRTotal$X2PA - median(BRTotal$X2PA)),
+            FT.Diff = abs(BRTotal$FT - median(BRTotal$FT)),
+            FTA.Diff =abs(BRTotal$FTA - median(BRTotal$FTA)),
+            TRB.Diff =abs(BRTotal$TRB - median(BRTotal$TRB)),
+            AST.Diff =abs(BRTotal$AST - median(BRTotal$AST)), 
+            STL.Diff =abs(BRTotal$STL - median(BRTotal$STL)), 
+            BLK.Diff =abs(BRTotal$BLK - median(BRTotal$BLK)),
+            TOV.Diff =abs(BRTotal$TOV - median(BRTotal$TOV)),
+            PF.Diff =abs(BRTotal$PF - median(BRTotal$PF)),
+            PTS.Diff =abs(BRTotal$PTS - median(BRTotal$PTS)),
+            FG_P.Diff =abs(BRTotal$FG_P - median(BRTotal$FG_P)),
+            FT_P.Diff =abs(BRTotal$FT_P - median(BRTotal$FT_P)),
+            X3P_P.Diff =abs(BRTotal$X3P_P - median(BRTotal$X3P_P)),
+            X2P_P.Diff =abs(BRTotal$X2P_P - median(BRTotal$X2P_P)),
+            eFG_P.Diff =abs(BRTotal$eFG_P - median(BRTotal$eFG_P)), 
+            ORB.Diff = abs(BRTotal$ORB - median(BRTotal$ORB)),
+            DRB.Diff = abs(BRTotal$DRB - median(BRTotal$DRB))  %>%
+     # Scaled Differences
+     mutate(Age.Diff.S = scale(Age.Diff)),
+            G.Diff.S = scale(G.Diff)),
             GS.Diff = abs(BRTotal$GS - median(BRTotal$GS)),
             MP.Diff = abs(BRTotal$MP - median(BRTotal$MP)),
             FG.Diff = abs(BRTotal$FG - median(BRTotal$FG)), 
@@ -158,11 +195,3 @@ PF_MP <- BRTotal_MP %>% filter(Pos=="PF")
 PF_O <- BRTotal_O %>% filter(Pos=="PF")
 ```
 
-# Scaling Function
-$\frac{x_i - min(x)} {max(x)- min(x)}$
-
-```{r scaling.function}
-scale <- function(vector) {
-  return (vector - min(vector)) /(max(vector) - min(vector))
-}
-```
