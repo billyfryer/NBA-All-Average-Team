@@ -14,7 +14,8 @@ PG_Data <- filter(AverageData, Pos == "PG")
 
 #Finding the Differences for each player from the averages
 PG_Sum_G <- select(PG_Data,FG:PTS) 
-PG_Median <- apply(PG_Sum_G, 2, median)
+PG_Test <- PG_Sum_G %>% mutate_if(is.numeric, funs(./PG_Data$G))
+PG_Median_G <- apply(PG_Test, 2, median)
 
 #Building the Dataframe of the Differences for Games Played
 
