@@ -157,3 +157,12 @@ PF_MP <- BRTotal_MP %>% filter(Pos=="PF")
 
 PF_O <- BRTotal_O %>% filter(Pos=="PF")
 ```
+
+# Scaling Function
+$\frac{x_i - min(x)} {max(x)- min(x)}$
+
+```{r scaling.function}
+scale <- function(vector) {
+  return (vector - min(vector)) /(max(vector) - min(vector))
+}
+```
