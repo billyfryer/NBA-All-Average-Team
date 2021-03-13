@@ -139,3 +139,21 @@ SF_O <- filter(BRTotal_O, Pos == "SF")
 SF_G <- filter(BRTotal_G, Pos == "SF")
 SF_MP <- filter(BRTotal_MP, Pos == "SF")
 ```
+
+#Filter Center Data
+```{r c}
+C_G <- BRTotal_G %>% filter(Pos=="C")
+
+C_MP <- BRTotal_MP %>% filter(Pos=="C")
+
+C_O <- BRTotal_O %>% filter(Pos=="C")
+```
+
+#Filter Power Forward
+```{r pf}
+PF_G <- BRTotal_G %>% filter(Pos=="PF")
+
+PF_MP <- BRTotal_MP %>% filter(Pos=="PF")
+
+PF_O <- BRTotal_O %>% filter(Pos=="PF")
+```
