@@ -229,3 +229,54 @@ C_G <- BRTotal_G %>% filter(Pos=="C")
 C_MP <- BRTotal_MP %>% filter(Pos=="C")
 C_O <- BRTotal_O %>% filter(Pos=="C")
 ```
+
+```{r, avg team}
+PG <- PG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+SG <- SG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+SF <- SF_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+PF <- PF_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+C  <-  C_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+
+avg_team <- rbind(PG, SG, SF, PF, C)  %>% filter(G > 19 & MP > 119) %>% arrange(temp)
+
+avg_start <- avg_team %>% filter(temp == 1)
+avg_bench <- avg_team %>% filter(temp == 2 | temp == 3)
+
+avg_stats <- select_if(avg_start, is.numeric) %>% colSums()
+
+pos_order <- c("PG", "SG", "SF", "PF", "C")
+
+#Timberwolves 
+TWolves_stats <- avg_team %>% filter(Tm == "MIN") 
+TWolves_stats <- TWolves_stats %>% slice(match(pos_order, Pos))
+TWolves_stats <- select_if(TWolves_stats, is.numeric) %>% colSums()
+
+Wolves_comp <- data.frame(avg_stats, TWolves_stats) 
+Wolves_comp <- Wolves_comp %>% filter(!grepl(".Diff", rownames(Wolves_comp))) 
+Wolves_comp <- Wolves_comp %>% mutate(Diff = avg_stats - TWolves_stats) %>% slice(7:28)
+row.names(Wolves_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
+
+#Warriors
+special_order <- c("PG", "SG", "PF", "PF", "C")
+Warriors_stats <- avg_team %>% filter(Tm == "GSW") 
+Warriors_stats <- Warriors_stats %>% slice(match(special_order, Pos))
+Warriors_stats <- select_if(Warriors_stats, is.numeric) %>% colSums()
+
+Warriors_comp <- data.frame(avg_stats, Warriors_stats) 
+Warriors_comp <- Warriors_comp %>% filter(!grepl(".Diff", rownames(Warriors_comp))) 
+Warriors_comp <- Warriors_comp %>% mutate(Diff = avg_stats - Warriors_stats) %>% slice(7:28)
+row.names(Warriors_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
+
+#Cavs
+Cavs_stats <- avg_team %>% filter(Tm == "CLE") 
+Cavs_stats <- Cavs_stats %>% slice(match(pos_order, Pos))
+Cavs_stats <- select_if(Cavs_stats, is.numeric) %>% colSums()
+
+Cavs_comp <- data.frame(avg_stats, Cavs_stats) 
+Cavs_comp <- Cavs_comp %>% filter(!grepl(".Diff", rownames(Cavs_comp))) 
+Cavs_comp <- Cavs_comp %>% mutate(Diff = avg_stats - Cavs_stats) %>% slice(7:28)
+row.names(Cavs_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
+
+
+rm(PG);rm(SG);rm(SF);rm(PF);rm(C)
+```
