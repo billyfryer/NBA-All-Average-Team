@@ -11,14 +11,6 @@ scale <- function(vector) {
 }
 ```
 
-# Scaling Function
-$\frac{x_i - min(x)} {max(x)- min(x)}$
-
-```{r scaling.function}
-scale <- function(vector) {
-  return (vector - min(vector)) /(max(vector) - min(vector))
-}
-```
 
 # Overall Stats Per Game
 
@@ -230,6 +222,10 @@ C_MP <- BRTotal_MP %>% filter(Pos=="C")
 C_O <- BRTotal_O %>% filter(Pos=="C")
 ```
 
+```{r test}
+ggplot(PG_G, aes(x = SScD)) + geom_histogram(binwidth = 100, fill = "aquamarine3", col = "black") 
+```
+
 ```{r, avg team}
 PG <- PG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
 SG <- SG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
@@ -279,4 +275,44 @@ row.names(Cavs_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA"
 
 
 rm(PG);rm(SG);rm(SF);rm(PF);rm(C)
+```
+
+```{r, graphs}
+
+#Stacked bar chart
+
+BR_Graph <- BRTotal_G %>% filter(G > 19 & MP > 239)
+ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ylim(0, 100) + ggtitle("SScD vs. Games") + ggsave("NBA G1.png")
+
+ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ylim(1500, 1900) + ggtitle("SScD vs. Games") + xlim(60, 82) + ggsave("NBA G2.png")
+
+ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ggtitle("SScD vs. Games") + ggsave("NBA G3.png")
+
+chicken <- Warriors_comp %>% pivot_longer(cols = c("avg_stats", "Warriors_stats"))
+chicken <- chicken %>% select(2:4) %>% filter(stats %in% c("PTS", "TRB", "AST", "SScD"))
+chicken$name <- ifelse(chicken$name == "Warriors_stats", chicken$name <- "Warriors", chicken$name <- "Avg Team")
+
+ggplot(data = chicken, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#008381", "#ffc72c")) + ggtitle("Average Team vs. Warriors (15-50) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank()) + ggsave("NBA G4.png")
+```
+
+```{r}
+y <- BRTotal_G %>% filter(G > 19 & MP > 240) %>% arrange(desc(SScD)) %>% mutate(temp = 0)
+y <- y %>% slice(match(pos_order, Pos)) 
+y_stats <- select_if(y, is.numeric) %>% colSums()
+
+R_stats <- filter(avg_team, Player %in% c("Kyle Lowry" , "Kawhi Leonard", "Danny Green", "Pascal Siakam", "Marc Gasol")) 
+R_stats <- R_stats %>% dplyr::relocate(c(temp, SScD), .after = last_col())
+R_stats <- select_if(R_stats, is.numeric) %>% colSums() 
+
+
+R_comp <- data.frame(y_stats, R_stats) 
+R_comp <- R_comp %>% filter(!grepl(".Diff", rownames(R_comp))) %>% slice(7:28)
+rownames(R_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
+R_comp$stats <- rownames(R_comp)
+
+sheep <- R_comp %>% pivot_longer(cols = c("y_stats", "R_stats"))
+sheep <- sheep %>% select(2:4) %>% filter(stats %in% c("PTS", "TRB", "AST", "SScD"))
+sheep$name <- ifelse(sheep$name == "R_stats", sheep$name <- "Raptors", sheep$name <- "Non-Avg Team")
+
+ggplot(data = sheep, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#0000FF", "#ce11")) + ggtitle("Non-Average Team vs. Raptors (53-19) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank()) + ggsave("NBA G5.png")
 ```
