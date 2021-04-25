@@ -17,7 +17,7 @@ scale <- function(vector) {
 ```{r overall, echo=FALSE}
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- BRTotal %>%
-            rename(Player = ï..Player,
+            rename(
                             FG_P = FG.,
                             FT_P = FT.,
                             X3P_P = X3P.,
@@ -306,13 +306,13 @@ R_stats <- select_if(R_stats, is.numeric) %>% colSums()
 
 
 R_comp <- data.frame(y_stats, R_stats) 
-R_comp <- R_comp %>% filter(!grepl(".Diff", rownames(R_comp))) %>% slice(7:28)
-rownames(R_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
-R_comp$stats <- rownames(R_comp)
+R_comp <- R_comp %>% filter(!grepl(".Diff", rownames(R_comp)))
+R_comp$stats <- rownames(R_comp) 
+R_comp <- R_comp %>% select(stats, everything())
 
 sheep <- R_comp %>% pivot_longer(cols = c("y_stats", "R_stats"))
-sheep <- sheep %>% select(2:4) %>% filter(stats %in% c("PTS", "TRB", "AST", "SScD"))
+sheep <- sheep %>% filter(stats %in% c("PTS", "TRB", "AST"))
 sheep$name <- ifelse(sheep$name == "R_stats", sheep$name <- "Raptors", sheep$name <- "Non-Avg Team")
 
-ggplot(data = sheep, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#0000FF", "#ce11")) + ggtitle("Non-Average Team vs. Raptors (53-19) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank()) + ggsave("NBA G5.png")
+ggplot(data = sheep, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#0000FF", "#ce1100")) + ggtitle("Non-Average Team vs. Raptors (53-19) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank())
 ```
