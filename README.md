@@ -8,3 +8,6 @@ The project focuses on the idea of a statistically average NBA Team. The idea st
 teams every year. Especially with lots of teams employing the tanking strategy (notably the 76ers in the mid-2010s
 and the Knicks since Carmelo left), we were hoping to see if a statistically average NBA would be competitive
 against some of these teams.
+
+
+For a Summary of the Report, feel free to look at our slides or the Poster!
