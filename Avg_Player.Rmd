@@ -17,14 +17,15 @@ scale <- function(vector) {
 ```{r overall, echo=FALSE}
 BRTotal <- read.csv("2019_20_BRTotal.csv")
 BRTotal <- BRTotal %>%
-            rename(
-                            FG_P = FG.,
-                            FT_P = FT.,
-                            X3P_P = X3P.,
-                            X2P_P = X2P.,
-                            eFG_P = eFG.)
-# Replace all nas with zeroes
-BRTotal <- BRTotal %>% mutate_all(~replace(., is.na(.), 0))
+            rename(FG_P = FG.,
+                    FT_P = FT.,
+                    X3P_P = X3P.,
+                    X2P_P = X2P.,
+                    eFG_P = eFG.,
+                    Player = ï..Player) %>% 
+          # Replace all nas with zeroes
+          mutate_all(~replace(., is.na(.), 0))
+
 # Making Differences
 BRTotal_O <- BRTotal %>%
      mutate(Age.Diff = abs(BRTotal$Age - median(BRTotal$Age)),
@@ -86,51 +87,51 @@ BRTotal_O <- BRTotal %>%
 
 ```{r overall.g}
 #Creating a dataframe with the data divided by Games Played
-BRTotal_Filter_G <- BRTotal_O %>% select(MP:DRB.Diff.S) 
-BRTotal_G <- BRTotal_Filter_G %>% mutate_if(is.numeric, funs(./BRTotal$G))
-BRTotal_G <- mutate(BRTotal_G, 
-                        Player = BRTotal_O$Player, 
-                        Pos = BRTotal_O$Pos, 
-                        Tm = BRTotal_O$Tm, 
-                        Age = BRTotal_O$Age, 
-                        Age.Diff.S = BRTotal_O$Age.Diff.S, 
-                        G = BRTotal_O$G, 
-                        G.Diff.S = BRTotal_O$G.Diff.S, 
-                        GS = BRTotal_O$GS, 
-                        GS.Diff.S = BRTotal_O$GS.Diff.S,
-                        MP = BRTotal_O$MP,
-                        MP.Diff.S = BRTotal_O$MP.Diff.S
-                        ) %>%
-              select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
+BRTotal_G <- BRTotal_O %>% 
+  select(MP:DRB.Diff.S) %>% 
+  mutate_if(is.numeric, function(x){x/BRTotal$G}) %>% 
+  mutate(Player = BRTotal_O$Player, 
+         Pos = BRTotal_O$Pos, 
+         Tm = BRTotal_O$Tm, 
+         Age = BRTotal_O$Age, 
+         Age.Diff.S = BRTotal_O$Age.Diff.S, 
+         G = BRTotal_O$G, 
+         G.Diff.S = BRTotal_O$G.Diff.S, 
+         GS = BRTotal_O$GS, 
+         GS.Diff.S = BRTotal_O$GS.Diff.S,
+         MP = BRTotal_O$MP,
+         MP.Diff.S = BRTotal_O$MP.Diff.S
+         ) %>%
+  select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
 ```
 
 ```{r overall.mp}
-#Creating a dataframe with the data divided by Minutes Played
-BRTotal_Filter_MP <- select(BRTotal_O,FG:DRB.Diff.S) 
-BRTotal_MP <- BRTotal_Filter_MP %>% mutate_if(is.numeric, funs(./BRTotal_O$MP))
-BRTotal_MP <- BRTotal_MP %>%
-            mutate(FG.Diff = abs(BRTotal_MP$FG - median(BRTotal_MP$FG)), 
-                   FGA.Diff = abs(BRTotal_MP$FGA - median(BRTotal_MP$FGA)),
-                   X3P.Diff = abs(BRTotal_MP$X3P - median(BRTotal_MP$X3P)),
-                   X3PA.Diff = abs(BRTotal_MP$X3PA- median(BRTotal_MP$X3PA)),
-                   X2P.Diff = abs(BRTotal_MP$X2P - median(BRTotal_MP$X2P)),
-                   X2PA.Diff =abs(BRTotal_MP$X2PA - median(BRTotal_MP$X2PA)),
-                   FT.Diff = abs(BRTotal_MP$FT - median(BRTotal_MP$FT)),
-                   FTA.Diff =abs(BRTotal_MP$FTA - median(BRTotal_MP$FTA)),
-                   TRB.Diff =abs(BRTotal_MP$TRB - median(BRTotal_MP$TRB)),
-                   AST.Diff =abs(BRTotal_MP$AST - median(BRTotal_MP$AST)), 
-                   STL.Diff =abs(BRTotal_MP$STL - median(BRTotal_MP$STL)), 
-                   BLK.Diff =abs(BRTotal_MP$BLK - median(BRTotal_MP$BLK)),
-                   TOV.Diff =abs(BRTotal_MP$TOV - median(BRTotal_MP$TOV)),
-                   PF.Diff =abs(BRTotal_MP$PF - median(BRTotal_MP$PF)),
-                   PTS.Diff =abs(BRTotal_MP$PTS - median(BRTotal_MP$PTS)),
-                   FG_P.Diff =abs(BRTotal_MP$FG_P - median(BRTotal_MP$FG_P)),
-                   FT_P.Diff =abs(BRTotal_MP$FT_P - median(BRTotal_MP$FT_P)),
-                   X3P_P.Diff =abs(BRTotal_MP$X3P_P - median(BRTotal_MP$X3P_P)),
-                   X2P_P.Diff =abs(BRTotal_MP$X2P_P - median(BRTotal_MP$X2P_P)),
-                   eFG_P.Diff =abs(BRTotal_MP$eFG_P - median(BRTotal_MP$eFG_P)), 
-                   ORB.Diff = abs(BRTotal_MP$ORB - median(BRTotal_MP$ORB)),
-                   DRB.Diff = abs(BRTotal_MP$DRB - median(BRTotal_MP$DRB))
+#Creating a data.frame with the data divided by Minutes Played
+BRTotal_MP <- BRTotal_O %>% 
+  select(FG:DRB.Diff.S) %>% 
+  mutate_if(is.numeric, function(x){x/BRTotal_O$MP}) %>%
+  mutate(FG.Diff = abs(FG - median(FG)), 
+                   FGA.Diff = abs(FGA - median(FGA)),
+                   X3P.Diff = abs(X3P - median(X3P)),
+                   X3PA.Diff = abs(X3PA- median(X3PA)),
+                   X2P.Diff = abs(X2P - median(X2P)),
+                   X2PA.Diff =abs(X2PA - median(X2PA)),
+                   FT.Diff = abs(FT - median(FT)),
+                   FTA.Diff =abs(FTA - median(FTA)),
+                   TRB.Diff =abs(TRB - median(TRB)),
+                   AST.Diff =abs(AST - median(AST)), 
+                   STL.Diff =abs(STL - median(STL)), 
+                   BLK.Diff =abs(BLK - median(BLK)),
+                   TOV.Diff =abs(TOV - median(TOV)),
+                   PF.Diff =abs(PF - median(PF)),
+                   PTS.Diff =abs(PTS - median(PTS)),
+                   FG_P.Diff =abs(FG_P - median(FG_P)),
+                   FT_P.Diff =abs(FT_P - median(FT_P)),
+                   X3P_P.Diff =abs(X3P_P - median(X3P_P)),
+                   X2P_P.Diff =abs(X2P_P - median(X2P_P)),
+                   eFG_P.Diff =abs(eFG_P - median(eFG_P)), 
+                   ORB.Diff = abs(ORB - median(ORB)),
+                   DRB.Diff = abs(DRB - median(DRB))
                    ) %>%
      # Scaling Differences
      mutate(FG.Diff.S = scale(FG.Diff), 
@@ -156,6 +157,7 @@ BRTotal_MP <- BRTotal_MP %>%
             ORB.Diff.S = scale(ORB.Diff),
             DRB.Diff.S = scale(DRB.Diff)
                    ) %>%
+  # Add back in Descriptive Data Columns
             mutate(Player = BRTotal_O$Player, 
                         Pos = BRTotal_O$Pos, 
                         Tm = BRTotal_O$Tm, 
@@ -170,8 +172,6 @@ BRTotal_MP <- BRTotal_MP %>%
                         ) %>%
   # Restructuring of Columns to make columns related to one another next to one another
               select(Player, Pos, Tm, Age, Age.Diff.S, G, G.Diff.S, GS, GS.Diff.S, MP, MP.Diff.S, FG, FG.Diff.S, FGA, FGA.Diff.S, X3P, X3P.Diff.S, X3PA, X3PA.Diff.S, X2P, X2P.Diff.S, X2PA, X2PA.Diff.S, FT, FT.Diff.S, FTA, FTA.Diff.S, TRB, TRB.Diff.S, AST, AST.Diff.S, STL, STL.Diff.S, BLK, BLK.Diff.S, TOV, TOV.Diff.S, PF, PF.Diff.S, PTS, PTS.Diff.S, FG_P, FG_P.Diff.S, FT_P, FT_P.Diff.S, X3P_P, X3P_P.Diff.S, X2P_P, X2P_P.Diff.S, eFG_P, eFG_P.Diff.S, ORB, ORB.Diff.S, DRB, DRB.Diff.S)
-#Remove Intermediate Steps
-rm(BRTotal_Filter_G);rm(BRTotal_Filter_MP)
 ```
 
 ```{r sums}
@@ -187,7 +187,7 @@ BRTotal_MP <- BRTotal_MP %>% mutate(SScD = rowSums(MP_Sums))
 rm(O_Sums);rm(G_Sums);rm(MP_Sums)
 ```
 
-#Filter PG Data
+# Filter PG Data
 ```{r pg}
 PG_O <- filter(BRTotal_O, Pos == "PG")
 PG_G <- filter(BRTotal_G, Pos == "PG")
@@ -223,17 +223,61 @@ C_O <- BRTotal_O %>% filter(Pos=="C")
 ```
 
 ```{r test}
-ggplot(PG_G, aes(x = SScD)) + geom_histogram(binwidth = 100, fill = "aquamarine3", col = "black") 
+ggplot(PG_G, aes(x = SScD)) + 
+  geom_histogram(binwidth = 100, 
+                 fill = "aquamarine3", 
+                 col = "black") 
+
+# Violin Plot of SScD By Position
+ggplot(BRTotal_G, aes(x = 0,
+                      y = SScD,
+                      fill = Pos)) +
+  geom_violin() +
+  facet_wrap(~Pos) +
+  theme_minimal() +
+  labs(fill = "Position",
+         x = "",
+         title = "SScD By Position") +
+  theme(axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5))
+
+  
 ```
 
 ```{r, avg team}
-PG <- PG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
-SG <- SG_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
-SF <- SF_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
-PF <- PF_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
+# Ordering All Players by SScD
+
+# Point Guard
+PG <- PG_G %>% 
+  arrange(SScD) %>% 
+  mutate(temp = rank(SScD)) %>% 
+  select(Player, SScD, temp, everything())
+
+# Shooting Guard
+SG <- SG_G %>% 
+  arrange(SScD) %>% 
+  mutate(temp = rank(SScD)) %>% 
+  select(Player, SScD, temp, everything())
+
+# Small Forward
+SF <- SF_G %>% 
+  arrange(SScD) %>% 
+  mutate(temp = rank(SScD)) %>% 
+  select(Player, SScD, temp, everything())
+
+# Power Forward
+PF <- PF_G %>% 
+  arrange(SScD) %>% 
+  mutate(temp = rank(SScD)) %>% 
+  select(Player, SScD, temp, everything())
+
+# Center
 C  <-  C_G %>% arrange(SScD) %>% mutate(temp = rank(SScD)) %>% select(Player, SScD, temp, everything())
 
-avg_team <- rbind(PG, SG, SF, PF, C)  %>% filter(G > 19 & MP > 119) %>% arrange(temp)
+# rbind all positions, filter by 19 GP & 119 MP
+avg_team <- rbind(PG, SG, SF, PF, C) %>% 
+  filter(G > 19 & MP > 119) %>% 
+  arrange(temp)
 
 avg_start <- avg_team %>% filter(temp == 1)
 avg_bench <- avg_team %>% filter(temp == 2 | temp == 3)
@@ -241,78 +285,173 @@ avg_bench <- avg_team %>% filter(temp == 2 | temp == 3)
 avg_stats <- select_if(avg_start, is.numeric) %>% colSums()
 
 pos_order <- c("PG", "SG", "SF", "PF", "C")
+```
 
-#Timberwolves 
-TWolves_stats <- avg_team %>% filter(Tm == "MIN") 
-TWolves_stats <- TWolves_stats %>% slice(match(pos_order, Pos))
+```{r Compare to Twolves and Warriors}
+# Timberwolves 
+TWolves_stats <- avg_team %>% 
+  filter(Tm == "MIN") %>% 
+  slice(match(pos_order, Pos))
+
 TWolves_stats <- select_if(TWolves_stats, is.numeric) %>% colSums()
 
 Wolves_comp <- data.frame(avg_stats, TWolves_stats) 
-Wolves_comp <- Wolves_comp %>% filter(!grepl(".Diff", rownames(Wolves_comp))) 
-Wolves_comp <- Wolves_comp %>% mutate(Diff = avg_stats - TWolves_stats) %>% slice(7:28)
+Wolves_comp <- Wolves_comp %>% 
+  filter(!grepl(".Diff", rownames(Wolves_comp)))
+
+Wolves_comp <- Wolves_comp %>% 
+  mutate(Diff = avg_stats - TWolves_stats) %>%
+  slice(7:28)
+
+# Change Row Names
 row.names(Wolves_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
 
-#Warriors
+# Warriors
 special_order <- c("PG", "SG", "PF", "PF", "C")
-Warriors_stats <- avg_team %>% filter(Tm == "GSW") 
-Warriors_stats <- Warriors_stats %>% slice(match(special_order, Pos))
+Warriors_stats <- avg_team %>% 
+  filter(Tm == "GSW") %>%  
+  slice(match(special_order, Pos))
+
+
 Warriors_stats <- select_if(Warriors_stats, is.numeric) %>% colSums()
 
-Warriors_comp <- data.frame(avg_stats, Warriors_stats) 
-Warriors_comp <- Warriors_comp %>% filter(!grepl(".Diff", rownames(Warriors_comp))) 
-Warriors_comp <- Warriors_comp %>% mutate(Diff = avg_stats - Warriors_stats) %>% slice(7:28)
+Warriors_comp <- data.frame(avg_stats, Warriors_stats)
+
+Warriors_comp <- Warriors_comp %>%
+  filter(!grepl(".Diff", rownames(Warriors_comp))) 
+
+Warriors_comp <- Warriors_comp %>% 
+  mutate(Diff = avg_stats - Warriors_stats) %>%
+  slice(7:28)
+
+# Row Names
 row.names(Warriors_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
 
-#Cavs
-Cavs_stats <- avg_team %>% filter(Tm == "CLE") 
-Cavs_stats <- Cavs_stats %>% slice(match(pos_order, Pos))
+# Cavs
+Cavs_stats <- avg_team %>% 
+  filter(Tm == "CLE") %>%
+  slice(match(pos_order, Pos))
+
 Cavs_stats <- select_if(Cavs_stats, is.numeric) %>% colSums()
 
 Cavs_comp <- data.frame(avg_stats, Cavs_stats) 
-Cavs_comp <- Cavs_comp %>% filter(!grepl(".Diff", rownames(Cavs_comp))) 
-Cavs_comp <- Cavs_comp %>% mutate(Diff = avg_stats - Cavs_stats) %>% slice(7:28)
+Cavs_comp <- Cavs_comp %>% 
+  filter(!grepl(".Diff", rownames(Cavs_comp))) 
+
+Cavs_comp <- Cavs_comp %>% 
+  mutate(Diff = avg_stats - Cavs_stats) %>%
+  slice(7:28)
+
+# rownames
 row.names(Cavs_comp) <- c("FG", "FGA", "X3P", "X3PA", "X2P", "X2PA", "FT", "FTA", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS", "FG_P", "FT_P", "X3P_P", "X2P_P", "eFG_P", "ORB", "DRB")
 
 
 rm(PG);rm(SG);rm(SF);rm(PF);rm(C)
 ```
 
-```{r, graphs}
+```{r, Warriors v Average Team}
+# Stacked bar chart
 
-#Stacked bar chart
+# Filter Data to Meet Minimums
+BR_Graph <- BRTotal_G %>% 
+  filter(G > 19 & MP > 239)
 
-BR_Graph <- BRTotal_G %>% filter(G > 19 & MP > 239)
-ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ylim(0, 100) + ggtitle("SScD vs. Games") + ggsave("NBA G1.png")
+ggplot(BR_Graph, aes(x = G,
+                     y = SScD)) +
+  geom_text(aes(label = Player, 
+                color = Pos), 
+            hjust = - 0.5, 
+            size = 1.8) + 
+  ylim(0, 100) + 
+  labs(title = "SScD vs. Games") +
+  theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ylim(1500, 1900) + ggtitle("SScD vs. Games") + xlim(60, 82) + ggsave("NBA G2.png")
+# Zoomed in on a certain part
+ggplot(BR_Graph, aes(x = G,
+                     y =SScD)) +
+  geom_text(aes(label = Player, 
+                color = Pos), 
+            hjust = - 0.5, 
+            size = 1.8) +
+  xlim(60, 82) +
+  ylim(1500, 1900) + 
+  labs(title = "SScD vs. Games") + 
+  theme(plot.title = element_text(hjust = 0.5))
 
-ggplot(BR_Graph, aes(G, SScD, label = rownames(Player))) + geom_text(aes(label = Player, color = Pos), hjust = - 0.5, size = 1.8) + ggtitle("SScD vs. Games") + ggsave("NBA G3.png")
+# Messy Plot with all of the Names.
+# Labels for important people to be added
+ggplot(BR_Graph, aes(x = G, 
+                     y = SScD)) +
+  geom_point(aes(color = Pos), 
+            size = 1.8) + 
+  labs(title = "SScD vs. Games") +
+  theme(plot.title = element_text(hjust = 0.5))
 
-chicken <- Warriors_comp %>% pivot_longer(cols = c("avg_stats", "Warriors_stats"))
-chicken <- chicken %>% select(2:4) %>% filter(stats %in% c("PTS", "TRB", "AST", "SScD"))
-chicken$name <- ifelse(chicken$name == "Warriors_stats", chicken$name <- "Warriors", chicken$name <- "Avg Team")
+# Average Team vs Warriors
+avg_v_warriors <- Warriors_comp %>% 
+  mutate(stats = rownames(Warriors_comp)) %>%
+  rename("Warriors" = "Warriors_stats",
+         "Avg Team" = "avg_stats") %>% 
+  pivot_longer(cols = c("Avg Team", "Warriors")) %>%
+  filter(stats %in% c("PTS", "TRB", "AST", "SScD"))
 
-ggplot(data = chicken, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#008381", "#ffc72c")) + ggtitle("Average Team vs. Warriors (15-50) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank()) + ggsave("NBA G4.png")
+
+ggplot(data = avg_v_warriors, aes(x = stats, 
+                           y = value, 
+                           fill = name)) + 
+  geom_bar(stat = "identity", 
+           position = position_dodge(), 
+           colour = "black") + 
+  scale_fill_manual(values = c("Avg Team" = "#008381",
+                              "Warriors"  = "#FFC72C")) + 
+  labs(title = "Average Team vs. Warriors (15-50) Comparison",
+       fill = "Team") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        plot.title = element_text(hjust = 0.5)) 
 ```
 
-```{r}
-y <- BRTotal_G %>% filter(G > 19 & MP > 240) %>% arrange(desc(SScD)) %>% mutate(temp = 0)
-y <- y %>% slice(match(pos_order, Pos)) 
-y_stats <- select_if(y, is.numeric) %>% colSums()
+```{r, Raptors vs Non Average Team}
+# Non Average Team
+y_stats <- BRTotal_G %>% 
+  filter(G > 19 & MP > 240) %>% 
+  arrange(desc(SScD)) %>% 
+  mutate(temp = 0) %>% 
+  slice(match(pos_order, Pos)) %>% 
+  select_if(is.numeric) %>% 
+  colSums()
 
-R_stats <- filter(avg_team, Player %in% c("Kyle Lowry" , "Kawhi Leonard", "Danny Green", "Pascal Siakam", "Marc Gasol")) 
-R_stats <- R_stats %>% dplyr::relocate(c(temp, SScD), .after = last_col())
-R_stats <- select_if(R_stats, is.numeric) %>% colSums() 
+# Raptors
+R_stats <- avg_team %>% 
+  filter(Player %in% c("Kyle Lowry" , "Kawhi Leonard", "Danny Green", "Pascal Siakam", "Marc Gasol")) %>% 
+  dplyr::relocate(c(temp, SScD), .after = last_col()) %>%
+  select_if(is.numeric) %>% 
+  colSums() 
 
+# Combine Non Average Team and Raptors
+R_comp <- data.frame(y_stats, R_stats)
 
-R_comp <- data.frame(y_stats, R_stats) 
-R_comp <- R_comp %>% filter(!grepl(".Diff", rownames(R_comp)))
-R_comp$stats <- rownames(R_comp) 
-R_comp <- R_comp %>% select(stats, everything())
+raptors_v_nonaverage <- R_comp %>%
+  mutate(stats = rownames(R_comp)) %>% 
+  filter(!grepl(".Diff", stats)) %>% 
+  select(stats, everything()) %>% 
+  pivot_longer(cols = c("y_stats", "R_stats")) %>%
+  filter(stats %in% c("PTS", "TRB", "AST")) %>% 
+  mutate(name = case_when(name == "R_stats" ~ "Raptors",
+                          TRUE ~ "Non-Avg Team"))
 
-sheep <- R_comp %>% pivot_longer(cols = c("y_stats", "R_stats"))
-sheep <- sheep %>% filter(stats %in% c("PTS", "TRB", "AST"))
-sheep$name <- ifelse(sheep$name == "R_stats", sheep$name <- "Raptors", sheep$name <- "Non-Avg Team")
-
-ggplot(data = sheep, aes(x = stats, y = value, fill = name)) + geom_bar(stat = "identity", position = position_dodge(), colour = "black") + scale_fill_manual(values = c("#0000FF", "#ce1100")) + ggtitle("Non-Average Team vs. Raptors (53-19) Comparison") + theme(axis.title.x=element_blank(), axis.title.y=element_blank())
+# Comparison Bar Graph Raptors vs Non-Avg Team
+ggplot(data = raptors_v_nonaverage,
+       aes(x = stats,
+           y = value,
+           fill = name)) + 
+  geom_bar(stat = "identity", 
+           position = position_dodge(), 
+           colour = "black") + 
+  scale_fill_manual(values = c("#0000FF", "#ce1100")) +
+  labs(title ="Non-Average Team vs. Raptors (53-19) Comparison",
+       fill = "Team") + 
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5))
 ```
